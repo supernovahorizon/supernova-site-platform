@@ -4,7 +4,7 @@ Open-source, schema-driven website platform and demonstration sites for small bu
 
 ## Status
 
-Groundwork foundation. This repository establishes the monorepo, shared packages, fictional demonstration sites, and CI quality gates. Package publication and production deployment are intentionally deferred.
+Landscaping golden path milestone. The platform can generate multi-page fictional landscaping demonstration sites from validated structured content, shared sections, and a minimal `create-site` CLI. Package publication and production deployment are intentionally deferred.
 
 ## Repositories
 
@@ -24,10 +24,20 @@ pnpm dev
 
 ## Demonstration apps
 
-- `apps/demo-landscaping` — fictional landscaping business
-- `apps/demo-fashion` — fictional fashion and jewelry studio
+- `apps/demo-landscaping` — Evergreen Grove Landscaping (16 pages)
+- `apps/demo-landscaping-blue-ridge` — Blue Ridge Outdoor Living (reuse proof)
+- `apps/demo-fashion` — fictional fashion and jewelry studio (groundwork stub)
 
-Both apps are clearly marked as demonstrations and must not present fake testimonials, ratings, or revenue claims.
+Landscaping demos are clearly marked as demonstrations and must not present fake testimonials, ratings, or revenue claims.
+
+## Landscaping quick start
+
+```bash
+pnpm --filter @supernova/demo-landscaping dev
+pnpm supernova create-site --name "Example Co" --slug example-co --vertical landscaping --dry-run
+```
+
+See `docs/tutorials/landscaping-golden-path.md`.
 
 ## License
 
