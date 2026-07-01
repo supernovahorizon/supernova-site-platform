@@ -10,12 +10,12 @@ Agents will initialize repositories, implement features, and open pull requests 
 
 ## Decision
 
-Version agent rules in `AGENTS.md`, require branch-based workflows, and forbid destructive infrastructure or visibility changes without approval.
+Version agent rules in `AGENTS.md`, require quality checks before pushing to `main`, and forbid destructive infrastructure or visibility changes without approval.
 
 ## Consequences
 
 - Safer automation with explicit stop conditions.
-- More documentation overhead for task contracts.
+- Pull requests remain available when collaboration requires review.
 
 ## Alternatives considered
 

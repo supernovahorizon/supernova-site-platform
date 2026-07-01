@@ -1,7 +1,7 @@
 # Agent Rules
 
 1. Never commit secrets, client lead data, production account IDs, or private client assets.
-2. Never push directly to `main`.
+2. For the `supernovahorizon` organization, push directly to `main` after local quality checks pass. Use feature branches and pull requests only when collaborating with others or when explicitly requested.
 3. Do not change repository visibility, licenses, billing, DNS, IAM, or production infrastructure without explicit approval.
 4. Respect package boundaries and public exports.
 5. Shared behavior belongs in packages; demo content belongs in apps.
