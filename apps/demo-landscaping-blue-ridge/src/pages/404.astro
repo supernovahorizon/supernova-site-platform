@@ -1,0 +1,35 @@
+---
+import Container from '@supernova/ui-primitives/Container.astro';
+import Section from '@supernova/ui-primitives/Section.astro';
+import Heading from '@supernova/ui-primitives/Heading.astro';
+import ButtonLink from '@supernova/ui-primitives/ButtonLink.astro';
+
+import LandscapingLayout from '../layouts/LandscapingLayout.astro';
+import { site } from '../site';
+---
+
+<LandscapingLayout
+  title={site.notFound.title}
+  description={site.notFound.message}
+  path="/404"
+>
+  <Section ariaLabel={site.notFound.title}>
+    <Container>
+      <article class="not-found">
+        <Heading level={1}>{site.notFound.title}</Heading>
+        <p>{site.notFound.message}</p>
+        <ButtonLink href={site.notFound.homeHref}>Return home</ButtonLink>
+      </article>
+    </Container>
+  </Section>
+</LandscapingLayout>
+
+<style>
+  .not-found {
+    background: var(--sn-color-surface, #ffffff);
+    border: 1px solid var(--sn-color-border, #d9e2ec);
+    border-radius: var(--sn-radius-lg, 1rem);
+    padding: var(--sn-space-xl, 2.5rem);
+    max-width: 50ch;
+  }
+</style>

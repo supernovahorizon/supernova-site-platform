@@ -1,0 +1,134 @@
+---
+import { buildPageMetadata } from '@supernova/seo';
+import { reducedMotionCss } from '@supernova/accessibility';
+import DemoBanner from '@supernova/ui-sections/DemoBanner.astro';
+import SiteHeader from '@supernova/ui-sections/SiteHeader.astro';
+import SiteFooter from '@supernova/ui-sections/SiteFooter.astro';
+import Breadcrumbs from '@supernova/ui-sections/Breadcrumbs.astro';
+import type { BreadcrumbItem } from '@supernova/ui-sections';
+import '@supernova/design-tokens/css';
+import '@supernova/ui-primitives/styles.css';
+import '@supernova/ui-sections/shared.css';
+
+import { site } from '../site';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  breadcrumbs?: BreadcrumbItem[];
+  jsonLd?: Record<string, unknown> | Array<Record<string, unknown>>;
+}
+
+const { title, description, path, breadcrumbs = [], jsonLd } = Astro.props;
+
+const pageTitle = `${title} | ${site.seo.titleSuffix}`;
+const metadata = buildPageMetadata({
+  siteUrl: site.siteUrl,
+  path,
+  title: pageTitle,
+  description,
+  robots: site.seo.robots,
+  socialImage: site.seo.socialImage,
+});
+
+const jsonLdEntries = jsonLd
+  ? Array.isArray(jsonLd)
+    ? jsonLd
+    : [jsonLd]
+  : [];
+
+const copyrightLabel = `© ${new Date().getFullYear()} ${site.business.legalName}. Demonstration site only.`;
+const fontFamily =
+  site.branding.fontFamily === 'serif'
+    ? 'Georgia, "Times New Roman", serif'
+    : site.branding.fontFamily === 'rounded'
+      ? '"Trebuchet MS", "Segoe UI", sans-serif'
+      : 'system-ui, -apple-system, "Segoe UI", sans-serif';
+---
+
+<!doctype html>
+<html lang={site.locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{metadata.title}</title>
+    <meta name="description" content={metadata.description} />
+    <link rel="canonical" href={metadata.canonical} />
+    <meta name="robots" content={metadata.robots} />
+    {site.branding.faviconSrc ? <link rel="icon" href={site.branding.faviconSrc} /> : null}
+    <meta property="og:title" content={metadata.openGraph.title} />
+    <meta property="og:description" content={metadata.openGraph.description} />
+    <meta property="og:url" content={metadata.openGraph.url} />
+    <meta property="og:type" content={metadata.openGraph.type} />
+    {
+      metadata.openGraph.image ? (
+        <>
+          <meta property="og:image" content={metadata.openGraph.image} />
+          <meta property="og:image:alt" content={metadata.openGraph.imageAlt} />
+        </>
+      ) : null
+    }
+    {
+      jsonLdEntries.map((entry) => (
+        <script type="application/ld+json" set:html={JSON.stringify(entry)} />
+      ))
+    }
+    <style
+      set:html={`:root {
+  --sn-color-accent: ${site.branding.accentColor};
+  --sn-color-primary: ${site.branding.primaryColor};
+}
+body {
+  margin: 0;
+  font-family: ${fontFamily};
+  color: var(--sn-color-text, #1f2933);
+  background: var(--sn-color-background, #f7fafc);
+}
+main:focus {
+  outline: none;
+}
+${reducedMotionCss}`}
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <DemoBanner />
+    <SiteHeader
+      logoSrc={site.branding.logoSrc}
+      logoAlt={site.branding.logoAlt}
+      navItems={site.navigation}
+    />
+    {breadcrumbs.length > 0 ? <Breadcrumbs items={breadcrumbs} /> : null}
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter
+      navItems={site.navigation}
+      copyrightLabel={copyrightLabel}
+      tagline={site.business.tagline}
+    />
+  </body>
+</html>
+
+<style>
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .skip-link:focus {
+    left: 1rem;
+    top: 1rem;
+    width: auto;
+    height: auto;
+    padding: 0.5rem 0.75rem;
+    background: #ffffff;
+    border: 2px solid var(--sn-color-accent, #2f6f4e);
+    z-index: 1000;
+  }
+</style>

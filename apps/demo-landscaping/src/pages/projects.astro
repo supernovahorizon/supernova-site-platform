@@ -1,0 +1,44 @@
+---
+import ProjectGallerySection from '@supernova/ui-sections/ProjectGallerySection.astro';
+import BeforeAfterSection from '@supernova/ui-sections/BeforeAfterSection.astro';
+import CtaBannerSection from '@supernova/ui-sections/CtaBannerSection.astro';
+
+import LandscapingLayout from '../layouts/LandscapingLayout.astro';
+import { site } from '../site';
+
+const quoteCta = site.ctas.find((cta) => cta.buttonHref === '/quote') ?? site.ctas[0];
+---
+
+<LandscapingLayout
+  title="Projects"
+  description={`Fictional project gallery for the ${site.business.displayName} demonstration portfolio.`}
+  path="/projects"
+  breadcrumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'Projects' },
+  ]}
+>
+  <ProjectGallerySection
+    heading="Demonstration projects"
+    intro="Portfolio cards link to service detail pages through serviceSlug relationships."
+    projects={site.projects}
+    projectBasePath="/projects"
+  />
+
+  <BeforeAfterSection
+    heading="Before and after panels"
+    intro="Placeholder comparisons show accessible alt text requirements."
+    comparisons={site.beforeAfter}
+  />
+
+  {
+    quoteCta ? (
+      <CtaBannerSection
+        headline={quoteCta.headline}
+        body={quoteCta.body}
+        buttonLabel={quoteCta.buttonLabel}
+        buttonHref={quoteCta.buttonHref}
+      />
+    ) : null
+  }
+</LandscapingLayout>

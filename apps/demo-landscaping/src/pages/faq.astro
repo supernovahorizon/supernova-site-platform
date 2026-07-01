@@ -1,0 +1,39 @@
+---
+import { createFaqPageJsonLd } from '@supernova/structured-data';
+import FaqAccordionSection from '@supernova/ui-sections/FaqAccordionSection.astro';
+import CtaBannerSection from '@supernova/ui-sections/CtaBannerSection.astro';
+
+import LandscapingLayout from '../layouts/LandscapingLayout.astro';
+import { site } from '../site';
+
+const contactCta = site.ctas.find((cta) => cta.buttonHref === '/contact') ?? site.ctas[1];
+const jsonLd = createFaqPageJsonLd(site.faq);
+---
+
+<LandscapingLayout
+  title="FAQ"
+  description={`Frequently asked questions for the ${site.business.displayName} demonstration business.`}
+  path="/faq"
+  breadcrumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'FAQ' },
+  ]}
+  jsonLd={jsonLd}
+>
+  <FaqAccordionSection
+    heading="Demonstration FAQ"
+    intro="Answers clarify that the business, imagery, and forms are fictional."
+    items={site.faq}
+  />
+
+  {
+    contactCta ? (
+      <CtaBannerSection
+        headline={contactCta.headline}
+        body={contactCta.body}
+        buttonLabel={contactCta.buttonLabel}
+        buttonHref={contactCta.buttonHref}
+      />
+    ) : null
+  }
+</LandscapingLayout>

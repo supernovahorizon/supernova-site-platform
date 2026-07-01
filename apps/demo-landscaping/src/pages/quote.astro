@@ -1,0 +1,26 @@
+---
+import QuoteRequestFormSection from '@supernova/ui-sections/QuoteRequestFormSection.astro';
+
+import LandscapingLayout from '../layouts/LandscapingLayout.astro';
+import { site } from '../site';
+---
+
+<LandscapingLayout
+  title="Request a quote"
+  description={`Demonstration quote form with client-side validation for the ${site.business.displayName} site.`}
+  path="/quote"
+  breadcrumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'Quote' },
+  ]}
+>
+  <QuoteRequestFormSection
+    heading="Request a demonstration quote"
+    intro="Submitting this form validates input locally and does not transmit data in the default demo."
+    submitLabel={site.leadForm.submitLabel}
+    successMessage={site.leadForm.successMessage}
+    privacyPolicyHref={site.leadForm.privacyPolicyHref}
+    services={site.leadForm.services}
+    budgetRanges={site.leadForm.budgetRanges}
+  />
+</LandscapingLayout>

@@ -1,0 +1,36 @@
+---
+import ServiceAreaListingSection from '@supernova/ui-sections/ServiceAreaListingSection.astro';
+import CtaBannerSection from '@supernova/ui-sections/CtaBannerSection.astro';
+
+import LandscapingLayout from '../../layouts/LandscapingLayout.astro';
+import { site } from '../../site';
+
+const contactCta = site.ctas.find((cta) => cta.buttonHref === '/contact') ?? site.ctas[1];
+---
+
+<LandscapingLayout
+  title="Service areas"
+  description={`Fictional neighborhoods served by the ${site.business.displayName} demonstration business.`}
+  path="/service-areas"
+  breadcrumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'Service areas' },
+  ]}
+>
+  <ServiceAreaListingSection
+    heading="Demonstration service areas"
+    intro="Each area links to localized copy that differs from the summary field."
+    areas={site.serviceAreas}
+  />
+
+  {
+    contactCta ? (
+      <CtaBannerSection
+        headline={contactCta.headline}
+        body={contactCta.body}
+        buttonLabel={contactCta.buttonLabel}
+        buttonHref={contactCta.buttonHref}
+      />
+    ) : null
+  }
+</LandscapingLayout>

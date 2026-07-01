@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" role="img" aria-label="Hardscape placeholder">
+  <rect width="800" height="500" fill="#e3efe8"/>
+  <rect x="60" y="80" width="680" height="300" rx="24" fill="#3d8b5f" opacity="0.25"/>
+  <text x="400" y="260" text-anchor="middle" font-family="system-ui,sans-serif" font-size="32" fill="#3d8b5f">Hardscape</text>
+  <text x="400" y="310" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" fill="#3d8b5f" opacity="0.8">Demonstration placeholder</text>
+</svg>

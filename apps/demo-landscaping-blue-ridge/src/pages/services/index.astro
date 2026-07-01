@@ -1,0 +1,36 @@
+---
+import ServiceCardsSection from '@supernova/ui-sections/ServiceCardsSection.astro';
+import CtaBannerSection from '@supernova/ui-sections/CtaBannerSection.astro';
+
+import LandscapingLayout from '../../layouts/LandscapingLayout.astro';
+import { site } from '../../site';
+
+const quoteCta = site.ctas.find((cta) => cta.buttonHref === '/quote') ?? site.ctas[0];
+---
+
+<LandscapingLayout
+  title="Services"
+  description={`Fictional landscaping services for the ${site.business.displayName} demonstration site.`}
+  path="/services"
+  breadcrumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'Services' },
+  ]}
+>
+  <ServiceCardsSection
+    heading="All demonstration services"
+    intro="Each service links to a detail page generated from validated content."
+    services={site.services}
+  />
+
+  {
+    quoteCta ? (
+      <CtaBannerSection
+        headline={quoteCta.headline}
+        body={quoteCta.body}
+        buttonLabel={quoteCta.buttonLabel}
+        buttonHref={quoteCta.buttonHref}
+      />
+    ) : null
+  }
+</LandscapingLayout>

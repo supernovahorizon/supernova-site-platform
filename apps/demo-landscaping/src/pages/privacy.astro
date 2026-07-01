@@ -1,0 +1,48 @@
+---
+import Container from '@supernova/ui-primitives/Container.astro';
+import Section from '@supernova/ui-primitives/Section.astro';
+import Heading from '@supernova/ui-primitives/Heading.astro';
+
+import LandscapingLayout from '../layouts/LandscapingLayout.astro';
+import { site } from '../site';
+---
+
+<LandscapingLayout
+  title={site.privacy.title}
+  description={`Demonstration privacy policy for the ${site.business.displayName} fictional business.`}
+  path="/privacy"
+  breadcrumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'Privacy' },
+  ]}
+>
+  <Section ariaLabel={site.privacy.title}>
+    <Container>
+      <article class="privacy-page">
+        <Heading level={1}>{site.privacy.title}</Heading>
+        {
+          site.privacy.sections.map((section) => (
+            <section>
+              <Heading level={2}>{section.heading}</Heading>
+              <p>{section.body}</p>
+            </section>
+          ))
+        }
+      </article>
+    </Container>
+  </Section>
+</LandscapingLayout>
+
+<style>
+  .privacy-page {
+    background: var(--sn-color-surface, #ffffff);
+    border: 1px solid var(--sn-color-border, #d9e2ec);
+    border-radius: var(--sn-radius-lg, 1rem);
+    padding: var(--sn-space-xl, 2.5rem);
+    max-width: 70ch;
+  }
+
+  .privacy-page section + section {
+    margin-top: var(--sn-space-lg, 1.5rem);
+  }
+</style>

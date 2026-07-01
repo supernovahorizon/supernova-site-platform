@@ -1,8 +1,8 @@
 import { defineConfig } from 'astro/config';
-import { evergreenGroveFixture } from '@supernova/vertical-landscaping';
+import { blueRidgeFixture } from '@supernova/vertical-landscaping';
 
 export default defineConfig({
-  site: evergreenGroveFixture.siteUrl,
+  site: blueRidgeFixture.siteUrl,
   vite: {
     ssr: {
       noExternal: [/^@supernova\//],

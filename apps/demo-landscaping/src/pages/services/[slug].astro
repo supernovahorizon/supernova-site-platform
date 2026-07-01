@@ -1,0 +1,111 @@
+---
+import Container from '@supernova/ui-primitives/Container.astro';
+import Section from '@supernova/ui-primitives/Section.astro';
+import Heading from '@supernova/ui-primitives/Heading.astro';
+import { createBreadcrumbJsonLd, createServiceJsonLd } from '@supernova/structured-data';
+import CtaBannerSection from '@supernova/ui-sections/CtaBannerSection.astro';
+
+import LandscapingLayout from '../../layouts/LandscapingLayout.astro';
+import { site } from '../../site';
+
+export function getStaticPaths() {
+  return site.services.map((service) => ({
+    params: { slug: service.slug },
+    props: { service },
+  }));
+}
+
+const { service } = Astro.props;
+const quoteCta = site.ctas.find((cta) => cta.buttonHref === '/quote') ?? site.ctas[0];
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Services', href: '/services' },
+  { label: service.name },
+];
+
+const jsonLd = [
+  createServiceJsonLd({
+    name: service.name,
+    description: service.description,
+    providerName: site.business.displayName,
+  }),
+  createBreadcrumbJsonLd(site.siteUrl, [
+    { name: 'Home', path: '/' },
+    { name: 'Services', path: '/services' },
+    { name: service.name, path: `/services/${service.slug}` },
+  ]),
+];
+---
+
+<LandscapingLayout
+  title={service.name}
+  description={service.summary}
+  path={`/services/${service.slug}`}
+  breadcrumbs={breadcrumbs}
+  jsonLd={jsonLd}
+>
+  <Section ariaLabel={service.name}>
+    <Container>
+      <div class="service-detail">
+        <div class="service-detail__content">
+          <Heading level={1}>{service.name}</Heading>
+          <p class="service-detail__summary">{service.summary}</p>
+          <p>{service.description}</p>
+          <Heading level={2}>Benefits</Heading>
+          <ul>
+            {service.benefits.map((benefit) => <li>{benefit}</li>)}
+          </ul>
+        </div>
+        <figure class="service-detail__figure">
+          <img src={service.heroImage.src} alt={service.heroImage.alt} loading="lazy" />
+        </figure>
+      </div>
+    </Container>
+  </Section>
+
+  {
+    quoteCta ? (
+      <CtaBannerSection
+        headline={quoteCta.headline}
+        body={quoteCta.body}
+        buttonLabel={quoteCta.buttonLabel}
+        buttonHref={quoteCta.buttonHref}
+      />
+    ) : null
+  }
+</LandscapingLayout>
+
+<style>
+  .service-detail {
+    display: grid;
+    gap: var(--sn-space-lg, 1.5rem);
+    background: var(--sn-color-surface, #ffffff);
+    border: 1px solid var(--sn-color-border, #d9e2ec);
+    border-radius: var(--sn-radius-lg, 1rem);
+    padding: var(--sn-space-xl, 2.5rem);
+  }
+
+  @media (min-width: 48rem) {
+    .service-detail {
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items: start;
+    }
+  }
+
+  .service-detail__summary {
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+
+  .service-detail__figure {
+    margin: 0;
+  }
+
+  .service-detail__figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--sn-radius-md, 0.5rem);
+  }
+</style>
