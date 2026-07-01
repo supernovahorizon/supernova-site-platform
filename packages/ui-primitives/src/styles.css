@@ -1,0 +1,10 @@
+body {
+  margin: 0;
+  font-family: var(--sn-font-body, system-ui, sans-serif);
+  color: var(--sn-color-text, #1f2933);
+  background: var(--sn-color-background, #f8faf8);
+}
+
+a {
+  color: inherit;
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@supernova/design-tokens",
+  "version": "0.0.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./css": "./dist/tokens.css"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && node ./scripts/generate-css.mjs",
+    "lint": "eslint src scripts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@supernova/eslint-config": "workspace:*",
+    "@supernova/typescript-config": "workspace:*",
+    "eslint": "^9.28.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

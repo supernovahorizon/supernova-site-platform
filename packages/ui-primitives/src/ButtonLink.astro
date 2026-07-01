@@ -1,0 +1,31 @@
+---
+interface Props {
+  href: string;
+  class?: string;
+}
+
+const { href, class: className = '' } = Astro.props;
+---
+
+<a class={`sn-button-link ${className}`.trim()} href={href}>
+  <slot />
+</a>
+
+<style>
+  .sn-button-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--sn-radius-md, 0.5rem);
+    background: var(--sn-color-accent, #2f6f4e);
+    color: var(--sn-color-accent-contrast, #ffffff);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .sn-button-link:focus-visible {
+    outline: 3px solid var(--sn-color-accent, #2f6f4e);
+    outline-offset: 3px;
+  }
+</style>

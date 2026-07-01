@@ -1,0 +1,36 @@
+---
+type Level = 1 | 2 | 3;
+
+interface Props {
+  level?: Level;
+  class?: string;
+}
+
+const { level = 2, class: className = '' } = Astro.props;
+const Tag = `h${level}` as 'h1' | 'h2' | 'h3';
+---
+
+<Tag class={`sn-heading sn-heading-${level} ${className}`.trim()}>
+  <slot />
+</Tag>
+
+<style>
+  .sn-heading {
+    font-family: var(--sn-font-heading, Georgia, serif);
+    color: var(--sn-color-text, #1f2933);
+    line-height: 1.2;
+    margin: 0 0 var(--sn-space-md, 1rem);
+  }
+
+  .sn-heading-1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .sn-heading-2 {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .sn-heading-3 {
+    font-size: 1.25rem;
+  }
+</style>

@@ -1,0 +1,19 @@
+---
+interface Props {
+  id?: string;
+  class?: string;
+  ariaLabel?: string;
+}
+
+const { id, class: className = '', ariaLabel } = Astro.props;
+---
+
+<section id={id} class={`sn-section ${className}`.trim()} aria-label={ariaLabel}>
+  <slot />
+</section>
+
+<style>
+  .sn-section {
+    padding-block: var(--sn-space-xl, 2.5rem);
+  }
+</style>

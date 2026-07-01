@@ -1,0 +1,28 @@
+{
+  "name": "@supernova/ui-primitives",
+  "version": "0.0.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    "./Container.astro": "./src/Container.astro",
+    "./Section.astro": "./src/Section.astro",
+    "./Heading.astro": "./src/Heading.astro",
+    "./ButtonLink.astro": "./src/ButtonLink.astro",
+    "./styles.css": "./src/styles.css"
+  },
+  "scripts": {
+    "build": "node -e \"console.log('@supernova/ui-primitives ready')\"",
+    "lint": "eslint \"src/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@supernova/eslint-config": "workspace:*",
+    "@supernova/typescript-config": "workspace:*",
+    "astro": "^5.9.3",
+    "eslint": "^9.28.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

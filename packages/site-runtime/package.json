@@ -1,0 +1,30 @@
+{
+  "name": "@supernova/site-runtime",
+  "version": "0.0.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@supernova/content-schema": "workspace:*",
+    "@supernova/site-config": "workspace:*"
+  },
+  "devDependencies": {
+    "@supernova/eslint-config": "workspace:*",
+    "@supernova/typescript-config": "workspace:*",
+    "eslint": "^9.28.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}
