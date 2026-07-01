@@ -3,6 +3,9 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.15.9",
+  "bin": {
+    "supernova": "./packages/cli/dist/bin/supernova.js"
+  },
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
@@ -11,6 +14,9 @@
     "test": "turbo run test",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "@supernova/cli": "workspace:*"
   },
   "devDependencies": {
     "@changesets/cli": "^2.28.0",
