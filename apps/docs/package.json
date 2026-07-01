@@ -1,0 +1,12 @@
+{
+  "name": "@supernova/docs",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node -e \"console.log('docs app groundwork placeholder')\"",
+    "dev": "node -e \"console.log('docs app not yet implemented')\"",
+    "lint": "node -e \"console.log('lint skipped: docs placeholder')\"",
+    "typecheck": "node -e \"console.log('typecheck skipped: docs placeholder')\"",
+    "test": "node -e \"console.log('test skipped: docs placeholder')\""
+  }
+}

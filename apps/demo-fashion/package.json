@@ -1,0 +1,30 @@
+{
+  "name": "@supernova/demo-fashion",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --port 4322",
+    "build": "astro build",
+    "preview": "astro preview",
+    "lint": "eslint \"src/**/*.ts\"",
+    "typecheck": "astro check",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@supernova/design-tokens": "workspace:*",
+    "@supernova/site-runtime": "workspace:*",
+    "@supernova/structured-data": "workspace:*",
+    "@supernova/ui-primitives": "workspace:*",
+    "@supernova/vertical-fashion": "workspace:*",
+    "astro": "^5.9.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@supernova/eslint-config": "workspace:*",
+    "@supernova/typescript-config": "workspace:*",
+    "eslint": "^9.28.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

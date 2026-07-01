@@ -1,0 +1,12 @@
+{
+  "name": "@supernova/playground",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node -e \"console.log('playground app groundwork placeholder')\"",
+    "dev": "node -e \"console.log('playground app not yet implemented')\"",
+    "lint": "node -e \"console.log('lint skipped: playground placeholder')\"",
+    "typecheck": "node -e \"console.log('typecheck skipped: playground placeholder')\"",
+    "test": "node -e \"console.log('test skipped: playground placeholder')\""
+  }
+}

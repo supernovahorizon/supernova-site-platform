@@ -1,0 +1,98 @@
+---
+import { createPageMetadata } from '@supernova/site-runtime';
+import { createLocalBusinessJsonLd } from '@supernova/structured-data';
+import { landscapingDemoContent } from '@supernova/vertical-landscaping';
+import Container from '@supernova/ui-primitives/Container.astro';
+import Section from '@supernova/ui-primitives/Section.astro';
+import Heading from '@supernova/ui-primitives/Heading.astro';
+import ButtonLink from '@supernova/ui-primitives/ButtonLink.astro';
+import '@supernova/design-tokens/css';
+import '@supernova/ui-primitives/styles.css';
+
+import { siteConfig } from '../site.config';
+
+const metadata = createPageMetadata({
+  site: siteConfig,
+  title: 'Home',
+  description: siteConfig.business.description,
+  path: '/',
+});
+
+const jsonLd = createLocalBusinessJsonLd({
+  business: siteConfig.business,
+  siteUrl: siteConfig.siteUrl,
+});
+---
+
+<html lang={siteConfig.locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{metadata.title}</title>
+    <meta name="description" content={metadata.description} />
+    <link rel="canonical" href={metadata.canonical} />
+    <meta name="robots" content="noindex,nofollow" />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <style>
+      .demo-banner {
+        background: #fff7ed;
+        border-bottom: 1px solid #fed7aa;
+        color: #9a3412;
+        font-weight: 600;
+        padding: 0.75rem 1rem;
+        text-align: center;
+      }
+
+      .hero {
+        background: var(--sn-color-surface);
+        border: 1px solid var(--sn-color-border);
+        border-radius: var(--sn-radius-lg);
+        padding: var(--sn-space-xl);
+      }
+
+      .services {
+        display: grid;
+        gap: var(--sn-space-md);
+        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+      }
+
+      .service-card {
+        background: var(--sn-color-surface);
+        border: 1px solid var(--sn-color-border);
+        border-radius: var(--sn-radius-md);
+        padding: var(--sn-space-md);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo-banner" role="note">
+      Demonstration business — fictional content for platform evaluation only.
+    </div>
+
+    <Section ariaLabel="Hero">
+      <Container>
+        <div class="hero">
+          <Heading level={1}>{landscapingDemoContent.heroTitle}</Heading>
+          <p>{landscapingDemoContent.heroSubtitle}</p>
+          <ButtonLink href="#services">View demonstration services</ButtonLink>
+        </div>
+      </Container>
+    </Section>
+
+    <Section id="services" ariaLabel="Services">
+      <Container>
+        <Heading level={2}>Demonstration services</Heading>
+        <div class="services">
+          {
+            landscapingDemoContent.services.map((service) => (
+              <article class="service-card">
+                <Heading level={3}>{service.name}</Heading>
+                <p>{service.summary}</p>
+              </article>
+            ))
+          }
+        </div>
+      </Container>
+    </Section>
+  </body>
+</html>
