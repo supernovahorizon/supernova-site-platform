@@ -1,0 +1,84 @@
+---
+import Container from '@supernova/ui-primitives/Container.astro';
+import Section from '@supernova/ui-primitives/Section.astro';
+import Heading from '@supernova/ui-primitives/Heading.astro';
+import type { TestimonialsSectionProps } from './component-props';
+import {
+  DEFAULT_FICTIONAL_DEMONSTRATION_LABEL,
+  getFictionalDemonstrationLabel,
+  requiresFictionalDemonstrationLabel,
+} from './props';
+
+interface Props extends TestimonialsSectionProps {}
+
+const {
+  heading,
+  intro,
+  testimonials,
+  fictionalDemonstrationLabel = DEFAULT_FICTIONAL_DEMONSTRATION_LABEL,
+  class: className = '',
+} = Astro.props;
+
+const showSectionLabel = requiresFictionalDemonstrationLabel(testimonials);
+---
+
+<Section class={`sn-sec-testimonials ${className}`.trim()} ariaLabel={heading}>
+  <Container>
+    <Heading level={2}>{heading}</Heading>
+    {intro ? <p class="sn-sec__intro">{intro}</p> : null}
+
+    {
+      showSectionLabel ? (
+        <p class="sn-sec-testimonials__section-label" role="note">
+          {fictionalDemonstrationLabel}
+        </p>
+      ) : null
+    }
+
+    <div class="sn-sec__grid sn-sec__grid--cards">
+      {
+        testimonials.map((testimonial) => {
+          const itemLabel = getFictionalDemonstrationLabel(
+            testimonial.isFictionalDemonstration,
+            fictionalDemonstrationLabel,
+          );
+
+          return (
+            <figure class="sn-sec__card sn-sec-testimonials__item">
+              <blockquote cite={`#testimonial-${testimonial.id}`}>
+                <p>{testimonial.quote}</p>
+              </blockquote>
+              <figcaption>
+                <strong>{testimonial.authorName}</strong>
+                <span class="sn-sec__muted"> — {testimonial.authorContext}</span>
+              </figcaption>
+              {itemLabel ? <p class="sn-sec-testimonials__item-label">{itemLabel}</p> : null}
+            </figure>
+          );
+        })
+      }
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .sn-sec-testimonials__section-label,
+  .sn-sec-testimonials__item-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #9a3412;
+    margin: 0 0 var(--sn-space-sm, 0.75rem);
+  }
+
+  .sn-sec-testimonials__item blockquote {
+    margin: 0 0 var(--sn-space-sm, 0.75rem);
+  }
+
+  .sn-sec-testimonials__item blockquote p {
+    margin: 0;
+  }
+
+  .sn-sec-testimonials__item figcaption {
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,60 @@
+---
+import Container from '@supernova/ui-primitives/Container.astro';
+import Section from '@supernova/ui-primitives/Section.astro';
+import Heading from '@supernova/ui-primitives/Heading.astro';
+import type { ServiceAreaListingSectionProps } from './component-props';
+import { resolveServiceAreaHref } from './props';
+
+interface Props extends ServiceAreaListingSectionProps {}
+
+const {
+  heading,
+  intro,
+  areas,
+  areaBasePath = '/service-areas',
+  class: className = '',
+} = Astro.props;
+---
+
+<Section class={`sn-sec-areas ${className}`.trim()} ariaLabel={heading}>
+  <Container>
+    <Heading level={2}>{heading}</Heading>
+    {intro ? <p class="sn-sec__intro">{intro}</p> : null}
+
+    <ul class="sn-sec-areas__list">
+      {
+        areas.map((area) => {
+          const href = resolveServiceAreaHref(area, areaBasePath);
+
+          return (
+            <li class="sn-sec__card">
+              <Heading level={3}>
+                <a class="sn-sec__card-link" href={href}>
+                  {area.name}
+                </a>
+              </Heading>
+              <p class="sn-sec__muted">{area.regionLabel}</p>
+              <p>{area.summary}</p>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </Container>
+</Section>
+
+<style>
+  .sn-sec-areas__list {
+    display: grid;
+    gap: var(--sn-space-md, 1rem);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  @media (min-width: 40rem) {
+    .sn-sec-areas__list {
+      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    }
+  }
+</style>

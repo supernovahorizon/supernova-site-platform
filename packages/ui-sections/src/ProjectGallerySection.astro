@@ -1,0 +1,59 @@
+---
+import Container from '@supernova/ui-primitives/Container.astro';
+import Section from '@supernova/ui-primitives/Section.astro';
+import Heading from '@supernova/ui-primitives/Heading.astro';
+import type { ProjectGallerySectionProps } from './component-props';
+import { resolveProjectHref } from './props';
+
+interface Props extends ProjectGallerySectionProps {}
+
+const {
+  heading,
+  intro,
+  projects,
+  projectBasePath = '/projects',
+  class: className = '',
+} = Astro.props;
+---
+
+<Section class={`sn-sec-gallery ${className}`.trim()} ariaLabel={heading}>
+  <Container>
+    <Heading level={2}>{heading}</Heading>
+    {intro ? <p class="sn-sec__intro">{intro}</p> : null}
+
+    <div class="sn-sec-gallery__grid">
+      {
+        projects.map((project) => {
+          const href = resolveProjectHref(project, projectBasePath);
+
+          return (
+            <article class="sn-sec__card sn-sec-gallery__item">
+              <a class="sn-sec__card-link" href={href}>
+                <img src={project.image.src} alt={project.image.alt} loading="lazy" />
+                <Heading level={3}>{project.title}</Heading>
+              </a>
+              <p>{project.summary}</p>
+              <p class="sn-sec__muted">{project.completedLabel}</p>
+            </article>
+          );
+        })
+      }
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .sn-sec-gallery__grid {
+    display: grid;
+    gap: var(--sn-space-md, 1rem);
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+
+  .sn-sec-gallery__item img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--sn-radius-sm, 0.25rem);
+    margin-bottom: var(--sn-space-sm, 0.75rem);
+  }
+</style>

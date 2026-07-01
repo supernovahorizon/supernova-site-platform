@@ -1,0 +1,43 @@
+---
+import Container from '@supernova/ui-primitives/Container.astro';
+import Section from '@supernova/ui-primitives/Section.astro';
+import Heading from '@supernova/ui-primitives/Heading.astro';
+import type { ServiceCardsSectionProps } from './component-props';
+import { resolveServiceHref } from './props';
+
+interface Props extends ServiceCardsSectionProps {}
+
+const {
+  heading,
+  intro,
+  services,
+  serviceBasePath = '/services',
+  class: className = '',
+} = Astro.props;
+---
+
+<Section class={`sn-sec-services ${className}`.trim()} ariaLabel={heading}>
+  <Container>
+    <Heading level={2}>{heading}</Heading>
+    {intro ? <p class="sn-sec__intro">{intro}</p> : null}
+
+    <div class="sn-sec__grid sn-sec__grid--cards">
+      {
+        services.map((service) => {
+          const href = resolveServiceHref(service, serviceBasePath);
+
+          return (
+            <article class="sn-sec__card">
+              <Heading level={3}>
+                <a class="sn-sec__card-link" href={href}>
+                  {service.name}
+                </a>
+              </Heading>
+              <p>{service.summary}</p>
+            </article>
+          );
+        })
+      }
+    </div>
+  </Container>
+</Section>

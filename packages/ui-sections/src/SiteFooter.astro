@@ -1,0 +1,75 @@
+---
+import Container from '@supernova/ui-primitives/Container.astro';
+import Section from '@supernova/ui-primitives/Section.astro';
+import type { SiteFooterProps } from './component-props';
+import { normalizeNavigationItems } from './props';
+
+interface Props extends SiteFooterProps {}
+
+const {
+  navItems = [],
+  copyrightLabel,
+  tagline,
+  class: className = '',
+} = Astro.props;
+
+const links = normalizeNavigationItems(navItems);
+---
+
+<Section class={`sn-sec-footer ${className}`.trim()} ariaLabel="Footer">
+  <Container>
+    {
+      tagline ? <p class="sn-sec-footer__tagline">{tagline}</p> : null
+    }
+
+    {
+      links.length > 0 ? (
+        <nav aria-label="Footer">
+          <ul class="sn-sec-footer__links">
+            {links.map((item) => (
+              <li>
+                <a class="sn-sec__footer-link" href={item.href}>
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ) : null
+    }
+
+    <p class="sn-sec-footer__copyright">{copyrightLabel}</p>
+  </Container>
+</Section>
+
+<style>
+  .sn-sec-footer {
+    border-top: 1px solid var(--sn-color-border, #d9e2ec);
+    background: var(--sn-color-surface, #ffffff);
+  }
+
+  .sn-sec-footer__tagline {
+    margin: 0 0 var(--sn-space-md, 1rem);
+    max-width: 65ch;
+  }
+
+  .sn-sec-footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sn-space-sm, 0.75rem) var(--sn-space-md, 1rem);
+    list-style: none;
+    margin: 0 0 var(--sn-space-md, 1rem);
+    padding: 0;
+  }
+
+  .sn-sec__footer-link {
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .sn-sec-footer__copyright {
+    margin: 0;
+    font-size: 0.9rem;
+    color: color-mix(in srgb, var(--sn-color-text, #1f2933) 75%, transparent);
+  }
+</style>

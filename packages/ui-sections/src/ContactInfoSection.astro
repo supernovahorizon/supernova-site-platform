@@ -1,0 +1,94 @@
+---
+import Container from '@supernova/ui-primitives/Container.astro';
+import Section from '@supernova/ui-primitives/Section.astro';
+import Heading from '@supernova/ui-primitives/Heading.astro';
+import type { ContactInfoSectionProps } from './component-props';
+import { formatPostalAddress } from './props';
+
+interface Props extends ContactInfoSectionProps {}
+
+const { heading, intro, contact, class: className = '' } = Astro.props;
+
+const formattedAddress = formatPostalAddress(contact.address);
+---
+
+<Section class={`sn-sec-contact ${className}`.trim()} ariaLabel={heading}>
+  <Container>
+    <Heading level={2}>{heading}</Heading>
+    {intro ? <p class="sn-sec__intro">{intro}</p> : null}
+
+    <div class="sn-sec-contact__grid">
+      <dl class="sn-sec-contact__details">
+        <div>
+          <dt>Phone</dt>
+          <dd>
+            <a href={`tel:${contact.phone}`}>{contact.phone}</a>
+          </dd>
+        </div>
+        <div>
+          <dt>Email</dt>
+          <dd>
+            <a href={`mailto:${contact.email}`}>{contact.email}</a>
+          </dd>
+        </div>
+        <div>
+          <dt>Address</dt>
+          <dd>{formattedAddress}</dd>
+        </div>
+      </dl>
+
+      {
+        contact.mapEmbedUrl ? (
+          <iframe
+            class="sn-sec-contact__map"
+            title="Map"
+            src={contact.mapEmbedUrl}
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          />
+        ) : null
+      }
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .sn-sec-contact__grid {
+    display: grid;
+    gap: var(--sn-space-lg, 1.5rem);
+  }
+
+  @media (min-width: 48rem) {
+    .sn-sec-contact__grid {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+  }
+
+  .sn-sec-contact__details {
+    margin: 0;
+    display: grid;
+    gap: var(--sn-space-md, 1rem);
+  }
+
+  .sn-sec-contact__details dt {
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+
+  .sn-sec-contact__details dd {
+    margin: 0;
+  }
+
+  .sn-sec-contact__details a:focus-visible {
+    outline: 3px solid var(--sn-color-accent, #2f6f4e);
+    outline-offset: 3px;
+  }
+
+  .sn-sec-contact__map {
+    width: 100%;
+    min-height: 16rem;
+    border: 1px solid var(--sn-color-border, #d9e2ec);
+    border-radius: var(--sn-radius-md, 0.5rem);
+  }
+</style>

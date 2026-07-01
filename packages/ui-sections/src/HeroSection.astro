@@ -1,0 +1,81 @@
+---
+import Container from '@supernova/ui-primitives/Container.astro';
+import Section from '@supernova/ui-primitives/Section.astro';
+import Heading from '@supernova/ui-primitives/Heading.astro';
+import ButtonLink from '@supernova/ui-primitives/ButtonLink.astro';
+import type { HeroSectionProps } from './component-props';
+
+interface Props extends HeroSectionProps {}
+
+const {
+  headline,
+  subheadline,
+  intro,
+  image,
+  cta,
+  class: className = '',
+} = Astro.props;
+---
+
+<Section class={`sn-sec-hero ${className}`.trim()} ariaLabel="Hero">
+  <Container>
+    <div class={`sn-sec-hero__layout${image ? ' sn-sec-hero__layout--with-image' : ''}`}>
+      <div class="sn-sec-hero__content">
+        <Heading level={1}>{headline}</Heading>
+        <p class="sn-sec-hero__subheadline">{subheadline}</p>
+        {intro ? <p class="sn-sec-hero__intro">{intro}</p> : null}
+        {cta ? <ButtonLink href={cta.href}>{cta.label}</ButtonLink> : null}
+      </div>
+
+      {
+        image ? (
+          <figure class="sn-sec-hero__figure">
+            <img src={image.src} alt={image.alt} loading="eager" />
+          </figure>
+        ) : null
+      }
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .sn-sec-hero__layout {
+    display: grid;
+    gap: var(--sn-space-lg, 1.5rem);
+    background: var(--sn-color-surface, #ffffff);
+    border: 1px solid var(--sn-color-border, #d9e2ec);
+    border-radius: var(--sn-radius-lg, 1rem);
+    padding: var(--sn-space-xl, 2.5rem);
+  }
+
+  .sn-sec-hero__layout--with-image {
+    align-items: center;
+  }
+
+  @media (min-width: 48rem) {
+    .sn-sec-hero__layout--with-image {
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+  }
+
+  .sn-sec-hero__subheadline {
+    font-size: 1.125rem;
+    margin: 0 0 var(--sn-space-md, 1rem);
+  }
+
+  .sn-sec-hero__intro {
+    margin: 0 0 var(--sn-space-lg, 1.5rem);
+    max-width: 65ch;
+  }
+
+  .sn-sec-hero__figure {
+    margin: 0;
+  }
+
+  .sn-sec-hero__figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--sn-radius-md, 0.5rem);
+  }
+</style>

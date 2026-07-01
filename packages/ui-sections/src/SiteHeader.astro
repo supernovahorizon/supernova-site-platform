@@ -1,0 +1,148 @@
+---
+import Container from '@supernova/ui-primitives/Container.astro';
+import type { SiteHeaderProps } from './component-props';
+import { normalizeNavigationItems } from './props';
+
+interface Props extends SiteHeaderProps {}
+
+const {
+  logoSrc,
+  logoAlt,
+  homeHref = '/',
+  navItems,
+  class: className = '',
+} = Astro.props;
+
+const links = normalizeNavigationItems(navItems);
+const navId = 'sn-site-nav';
+---
+
+<header class={`sn-sec-header ${className}`.trim()}>
+  <Container>
+    <div class="sn-sec-header__inner">
+      <a class="sn-sec-header__brand" href={homeHref}>
+        <img class="sn-sec-header__logo" src={logoSrc} alt={logoAlt} width="160" height="48" />
+      </a>
+
+      <nav class="sn-sec-header__nav" id={navId} aria-label="Primary">
+        <ul class="sn-sec-header__nav-list">
+          {
+            links.map((item) => (
+              <li>
+                <a class="sn-sec__nav-link" href={item.href}>
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <details class="sn-sec-header__mobile">
+        <summary class="sn-sec__summary sn-sec-header__menu-button">Menu</summary>
+        <nav class="sn-sec-header__mobile-nav" aria-label="Mobile primary">
+          <ul class="sn-sec-header__nav-list">
+            {
+              links.map((item) => (
+                <li>
+                  <a class="sn-sec__nav-link" href={item.href}>
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </details>
+    </div>
+  </Container>
+</header>
+
+<style>
+  .sn-sec-header {
+    border-bottom: 1px solid var(--sn-color-border, #d9e2ec);
+    background: var(--sn-color-surface, #ffffff);
+    padding-block: var(--sn-space-md, 1rem);
+  }
+
+  .sn-sec-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sn-space-md, 1rem);
+  }
+
+  .sn-sec-header__brand {
+    display: inline-flex;
+    text-decoration: none;
+  }
+
+  .sn-sec-header__brand:focus-visible {
+    outline: 3px solid var(--sn-color-accent, #2f6f4e);
+    outline-offset: 3px;
+  }
+
+  .sn-sec-header__logo {
+    display: block;
+    height: auto;
+    max-height: 3rem;
+    width: auto;
+  }
+
+  .sn-sec-header__nav-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sn-space-sm, 0.75rem) var(--sn-space-md, 1rem);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .sn-sec__nav-link {
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .sn-sec-header__nav {
+    display: none;
+  }
+
+  .sn-sec-header__mobile {
+    position: relative;
+  }
+
+  .sn-sec-header__menu-button {
+    cursor: pointer;
+    font-weight: 600;
+    list-style: none;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--sn-color-border, #d9e2ec);
+    border-radius: var(--sn-radius-sm, 0.25rem);
+  }
+
+  .sn-sec-header__menu-button::-webkit-details-marker {
+    display: none;
+  }
+
+  .sn-sec-header__mobile-nav {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.5rem);
+    min-width: 12rem;
+    background: var(--sn-color-surface, #ffffff);
+    border: 1px solid var(--sn-color-border, #d9e2ec);
+    border-radius: var(--sn-radius-md, 0.5rem);
+    padding: var(--sn-space-sm, 0.75rem);
+    box-shadow: 0 8px 24px rgb(15 23 42 / 8%);
+  }
+
+  @media (min-width: 48rem) {
+    .sn-sec-header__nav {
+      display: block;
+    }
+
+    .sn-sec-header__mobile {
+      display: none;
+    }
+  }
+</style>

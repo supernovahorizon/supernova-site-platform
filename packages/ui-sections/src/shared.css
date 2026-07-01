@@ -1,0 +1,54 @@
+.sn-sec {
+  padding-block: var(--sn-space-xl, 2.5rem);
+}
+
+.sn-sec--compact {
+  padding-block: var(--sn-space-lg, 1.5rem);
+}
+
+.sn-sec__intro {
+  margin: 0 0 var(--sn-space-lg, 1.5rem);
+  max-width: 65ch;
+  color: var(--sn-color-text, #1f2933);
+}
+
+.sn-sec__grid {
+  display: grid;
+  gap: var(--sn-space-md, 1rem);
+}
+
+.sn-sec__grid--cards {
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+
+.sn-sec__card {
+  background: var(--sn-color-surface, #ffffff);
+  border: 1px solid var(--sn-color-border, #d9e2ec);
+  border-radius: var(--sn-radius-md, 0.5rem);
+  padding: var(--sn-space-md, 1rem);
+}
+
+.sn-sec__card-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.sn-sec__card-link:focus-visible,
+.sn-sec__nav-link:focus-visible,
+.sn-sec__footer-link:focus-visible,
+.sn-sec__breadcrumb-link:focus-visible,
+.sn-sec__button:focus-visible,
+.sn-sec__slider:focus-visible,
+.sn-sec__form input:focus-visible,
+.sn-sec__form select:focus-visible,
+.sn-sec__form textarea:focus-visible,
+.sn-sec__form button:focus-visible,
+.sn-sec__summary:focus-visible {
+  outline: 3px solid var(--sn-color-accent, #2f6f4e);
+  outline-offset: 3px;
+}
+
+.sn-sec__muted {
+  color: color-mix(in srgb, var(--sn-color-text, #1f2933) 70%, transparent);
+  font-size: 0.95rem;
+}

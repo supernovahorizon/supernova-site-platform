@@ -1,0 +1,260 @@
+---
+import Container from '@supernova/ui-primitives/Container.astro';
+import Section from '@supernova/ui-primitives/Section.astro';
+import Heading from '@supernova/ui-primitives/Heading.astro';
+import type { QuoteRequestFormSectionProps } from './component-props';
+import { getQuoteRequestInputNames } from './props';
+
+interface Props extends QuoteRequestFormSectionProps {}
+
+const {
+  heading = 'Request a quote',
+  intro,
+  submitLabel,
+  successMessage,
+  privacyPolicyHref,
+  privacyPolicyLabel = 'Privacy policy',
+  services,
+  budgetRanges = [],
+  formAction = '#quote',
+  staticSubmissionNote = 'Static demo sites can post to /api/quote when an adapter is wired. This form validates client-side and uses the configured action.',
+  preferredContactMethods = ['email', 'phone', 'either'],
+  class: className = '',
+} = Astro.props;
+
+const fieldNames = getQuoteRequestInputNames();
+const formId = 'sn-quote-request-form';
+const statusId = 'sn-quote-request-status';
+---
+
+<Section class={`sn-sec-quote ${className}`.trim()} ariaLabel={heading} id="quote">
+  <Container>
+    <Heading level={2}>{heading}</Heading>
+    {intro ? <p class="sn-sec__intro">{intro}</p> : null}
+    <p class="sn-sec__muted">{staticSubmissionNote}</p>
+
+    <form
+      id={formId}
+      class="sn-sec__form sn-sec-quote__form"
+      action={formAction}
+      method="post"
+      novalidate
+      data-quote-form
+      data-success-message={successMessage}
+    >
+      <div class="sn-sec-quote__field">
+        <label for="quote-name">Full name</label>
+        <input id="quote-name" name="name" type="text" required minlength="1" maxlength="120" autocomplete="name" />
+      </div>
+
+      <div class="sn-sec-quote__field">
+        <label for="quote-email">Email</label>
+        <input id="quote-email" name="email" type="email" required autocomplete="email" />
+      </div>
+
+      <div class="sn-sec-quote__field">
+        <label for="quote-phone">Phone</label>
+        <input
+          id="quote-phone"
+          name="phone"
+          type="tel"
+          required
+          minlength="7"
+          maxlength="30"
+          autocomplete="tel"
+        />
+      </div>
+
+      <div class="sn-sec-quote__field">
+        <label for="quote-service">Requested service</label>
+        <select id="quote-service" name="requestedService" required>
+          <option value="">Select a service</option>
+          {services.map((service) => <option value={service}>{service}</option>)}
+        </select>
+      </div>
+
+      <div class="sn-sec-quote__field">
+        <label for="quote-address">Service address or ZIP</label>
+        <input
+          id="quote-address"
+          name="serviceAddressOrZip"
+          type="text"
+          required
+          minlength="3"
+          maxlength="160"
+          autocomplete="street-address"
+        />
+      </div>
+
+      <div class="sn-sec-quote__field">
+        <label for="quote-contact-method">Preferred contact method</label>
+        <select id="quote-contact-method" name="preferredContactMethod" required>
+          {
+            preferredContactMethods.map((method) => (
+              <option value={method}>
+                {method === 'either' ? 'Email or phone' : method.charAt(0).toUpperCase() + method.slice(1)}
+              </option>
+            ))
+          }
+        </select>
+      </div>
+
+      <div class="sn-sec-quote__field">
+        <label for="quote-description">Project description</label>
+        <textarea
+          id="quote-description"
+          name="projectDescription"
+          required
+          minlength="20"
+          maxlength="2000"
+          rows="5"
+        />
+      </div>
+
+      {
+        budgetRanges.length > 0 ? (
+          <div class="sn-sec-quote__field">
+            <label for="quote-budget">Budget range (optional)</label>
+            <select id="quote-budget" name="budgetRange">
+              <option value="">Prefer not to say</option>
+              {budgetRanges.map((range) => <option value={range}>{range}</option>)}
+            </select>
+          </div>
+        ) : (
+          <input type="hidden" name="budgetRange" value="" />
+        )
+      }
+
+      <div class="sn-sec-quote__field sn-sec-quote__field--checkbox">
+        <input id="quote-consent" name="consentAcknowledgment" type="checkbox" value="true" required />
+        <label for="quote-consent">
+          I agree to be contacted about this request and have read the{' '}
+          <a href={privacyPolicyHref}>{privacyPolicyLabel}</a>.
+        </label>
+      </div>
+
+      <div class="sn-sec-quote__honeypot" aria-hidden="true">
+        <label for="quote-honeypot">Leave blank</label>
+        <input id="quote-honeypot" name="honeypot" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <button class="sn-sec__button" type="submit">{submitLabel}</button>
+      <p id={statusId} class="sn-sec-quote__status" role="status" aria-live="polite" />
+    </form>
+
+    <template data-quote-field-names={JSON.stringify(fieldNames)} />
+  </Container>
+</Section>
+
+<script>
+  import { QuoteRequestSchema } from '@supernova/forms';
+
+  const form = document.querySelector('[data-quote-form]');
+
+  if (form instanceof HTMLFormElement) {
+    const status = form.querySelector('#sn-quote-request-status');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+      const consent = formData.get('consentAcknowledgment');
+      const payload = {
+        name: String(formData.get('name') ?? ''),
+        email: String(formData.get('email') ?? ''),
+        phone: String(formData.get('phone') ?? ''),
+        requestedService: String(formData.get('requestedService') ?? ''),
+        serviceAddressOrZip: String(formData.get('serviceAddressOrZip') ?? ''),
+        preferredContactMethod: String(formData.get('preferredContactMethod') ?? ''),
+        projectDescription: String(formData.get('projectDescription') ?? ''),
+        budgetRange: String(formData.get('budgetRange') ?? '') || undefined,
+        consentAcknowledgment: consent === 'true' ? true : false,
+        honeypot: String(formData.get('honeypot') ?? ''),
+      };
+
+      const parsed = QuoteRequestSchema.safeParse(payload);
+
+      if (!parsed.success) {
+        const message = parsed.error.issues.map((issue) => issue.message).join(' ');
+        if (status instanceof HTMLElement) {
+          status.textContent = message;
+        }
+        return;
+      }
+
+      const successMessage = form.dataset.successMessage ?? 'Thanks — your request was validated.';
+      if (status instanceof HTMLElement) {
+        status.textContent = successMessage;
+      }
+
+      if (form.action && !form.action.endsWith('#quote')) {
+        form.submit();
+      }
+    });
+  }
+</script>
+
+<style>
+  .sn-sec-quote__form {
+    display: grid;
+    gap: var(--sn-space-md, 1rem);
+    max-width: 40rem;
+    margin-top: var(--sn-space-md, 1rem);
+  }
+
+  .sn-sec-quote__field {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .sn-sec-quote__field--checkbox {
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    gap: 0.5rem;
+  }
+
+  .sn-sec-quote__field label {
+    font-weight: 600;
+  }
+
+  .sn-sec-quote__field input,
+  .sn-sec-quote__field select,
+  .sn-sec-quote__field textarea {
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid var(--sn-color-border, #d9e2ec);
+    border-radius: var(--sn-radius-sm, 0.25rem);
+    font: inherit;
+  }
+
+  .sn-sec-quote__honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .sn-sec__button {
+    justify-self: start;
+    padding: 0.75rem 1.25rem;
+    border: 0;
+    border-radius: var(--sn-radius-md, 0.5rem);
+    background: var(--sn-color-accent, #2f6f4e);
+    color: var(--sn-color-accent-contrast, #ffffff);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .sn-sec-quote__status {
+    margin: 0;
+    min-height: 1.25rem;
+    font-weight: 600;
+  }
+
+  .sn-sec-quote__field a:focus-visible {
+    outline: 3px solid var(--sn-color-accent, #2f6f4e);
+    outline-offset: 3px;
+  }
+</style>

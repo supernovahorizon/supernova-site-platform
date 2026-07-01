@@ -1,0 +1,61 @@
+---
+import Container from '@supernova/ui-primitives/Container.astro';
+import Section from '@supernova/ui-primitives/Section.astro';
+import Heading from '@supernova/ui-primitives/Heading.astro';
+import type { FaqAccordionSectionProps } from './component-props';
+
+interface Props extends FaqAccordionSectionProps {}
+
+const { heading, intro, items, class: className = '' } = Astro.props;
+---
+
+<Section class={`sn-sec-faq ${className}`.trim()} ariaLabel={heading}>
+  <Container>
+    <Heading level={2}>{heading}</Heading>
+    {intro ? <p class="sn-sec__intro">{intro}</p> : null}
+
+    <div class="sn-sec-faq__list">
+      {
+        items.map((item, index) => (
+          <details class="sn-sec-faq__item">
+            <summary class="sn-sec__summary">{item.question}</summary>
+            <div class="sn-sec-faq__answer" id={`faq-answer-${index}`}>
+              <p>{item.answer}</p>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .sn-sec-faq__list {
+    display: grid;
+    gap: var(--sn-space-sm, 0.75rem);
+  }
+
+  .sn-sec-faq__item {
+    border: 1px solid var(--sn-color-border, #d9e2ec);
+    border-radius: var(--sn-radius-md, 0.5rem);
+    background: var(--sn-color-surface, #ffffff);
+    padding: var(--sn-space-sm, 0.75rem) var(--sn-space-md, 1rem);
+  }
+
+  .sn-sec__summary {
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .sn-sec__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .sn-sec-faq__answer {
+    margin-top: var(--sn-space-sm, 0.75rem);
+  }
+
+  .sn-sec-faq__answer p {
+    margin: 0;
+  }
+</style>

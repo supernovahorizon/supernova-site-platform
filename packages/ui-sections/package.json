@@ -4,10 +4,44 @@
   "private": true,
   "license": "Apache-2.0",
   "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./SiteHeader.astro": "./src/SiteHeader.astro",
+    "./SiteFooter.astro": "./src/SiteFooter.astro",
+    "./HeroSection.astro": "./src/HeroSection.astro",
+    "./ServiceCardsSection.astro": "./src/ServiceCardsSection.astro",
+    "./ServiceAreaListingSection.astro": "./src/ServiceAreaListingSection.astro",
+    "./CtaBannerSection.astro": "./src/CtaBannerSection.astro",
+    "./TestimonialsSection.astro": "./src/TestimonialsSection.astro",
+    "./FaqAccordionSection.astro": "./src/FaqAccordionSection.astro",
+    "./ProjectGallerySection.astro": "./src/ProjectGallerySection.astro",
+    "./BeforeAfterSection.astro": "./src/BeforeAfterSection.astro",
+    "./ContactInfoSection.astro": "./src/ContactInfoSection.astro",
+    "./BusinessHoursSection.astro": "./src/BusinessHoursSection.astro",
+    "./QuoteRequestFormSection.astro": "./src/QuoteRequestFormSection.astro",
+    "./Breadcrumbs.astro": "./src/Breadcrumbs.astro",
+    "./DemoBanner.astro": "./src/DemoBanner.astro",
+    "./shared.css": "./src/shared.css"
+  },
   "scripts": {
-    "build": "node -e \"console.log('@supernova/ui-sections groundwork placeholder')\"",
-    "lint": "node -e \"console.log('lint skipped: groundwork placeholder')\"",
-    "typecheck": "node -e \"console.log('typecheck skipped: groundwork placeholder')\"",
-    "test": "node -e \"console.log('test skipped: groundwork placeholder')\""
+    "build": "node -e \"console.log('@supernova/ui-sections ready')\"",
+    "lint": "eslint \"src/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@supernova/forms": "workspace:*",
+    "@supernova/ui-primitives": "workspace:*"
+  },
+  "devDependencies": {
+    "@supernova/eslint-config": "workspace:*",
+    "@supernova/typescript-config": "workspace:*",
+    "astro": "^5.9.3",
+    "eslint": "^9.28.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
   }
 }

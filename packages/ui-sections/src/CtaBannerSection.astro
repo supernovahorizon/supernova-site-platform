@@ -1,0 +1,36 @@
+---
+import Container from '@supernova/ui-primitives/Container.astro';
+import Section from '@supernova/ui-primitives/Section.astro';
+import Heading from '@supernova/ui-primitives/Heading.astro';
+import ButtonLink from '@supernova/ui-primitives/ButtonLink.astro';
+import type { CtaBannerSectionProps } from './component-props';
+
+interface Props extends CtaBannerSectionProps {}
+
+const { headline, body, buttonLabel, buttonHref, class: className = '' } = Astro.props;
+---
+
+<Section class={`sn-sec-cta ${className}`.trim()} ariaLabel="Call to action">
+  <Container>
+    <div class="sn-sec-cta__panel">
+      <Heading level={2}>{headline}</Heading>
+      <p class="sn-sec-cta__body">{body}</p>
+      <ButtonLink href={buttonHref}>{buttonLabel}</ButtonLink>
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .sn-sec-cta__panel {
+    background: color-mix(in srgb, var(--sn-color-accent, #2f6f4e) 12%, var(--sn-color-surface, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--sn-color-accent, #2f6f4e) 35%, var(--sn-color-border, #d9e2ec));
+    border-radius: var(--sn-radius-lg, 1rem);
+    padding: var(--sn-space-xl, 2.5rem);
+    text-align: center;
+  }
+
+  .sn-sec-cta__body {
+    margin: 0 auto var(--sn-space-lg, 1.5rem);
+    max-width: 55ch;
+  }
+</style>

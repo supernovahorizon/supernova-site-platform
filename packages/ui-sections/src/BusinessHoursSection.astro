@@ -1,0 +1,71 @@
+---
+import Container from '@supernova/ui-primitives/Container.astro';
+import Section from '@supernova/ui-primitives/Section.astro';
+import Heading from '@supernova/ui-primitives/Heading.astro';
+import type { BusinessHoursSectionProps } from './component-props';
+import {
+  BUSINESS_HOUR_DAY_KEYS,
+  BUSINESS_HOUR_DAY_LABELS,
+  formatDayHours,
+} from './props';
+
+interface Props extends BusinessHoursSectionProps {}
+
+const { heading, intro, hours, class: className = '' } = Astro.props;
+---
+
+<Section class={`sn-sec-hours ${className}`.trim()} ariaLabel={heading}>
+  <Container>
+    <Heading level={2}>{heading}</Heading>
+    {intro ? <p class="sn-sec__intro">{intro}</p> : null}
+
+    <table class="sn-sec-hours__table">
+      <caption class="sn-sec-hours__caption">{heading}</caption>
+      <thead>
+        <tr>
+          <th scope="col">Day</th>
+          <th scope="col">Hours</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          BUSINESS_HOUR_DAY_KEYS.map((dayKey) => (
+            <tr>
+              <th scope="row">{BUSINESS_HOUR_DAY_LABELS[dayKey]}</th>
+              <td>{formatDayHours(hours[dayKey])}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+
+    {hours.notes ? <p class="sn-sec__muted">{hours.notes}</p> : null}
+  </Container>
+</Section>
+
+<style>
+  .sn-sec-hours__table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: var(--sn-space-md, 1rem);
+  }
+
+  .sn-sec-hours__caption {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .sn-sec-hours__table th,
+  .sn-sec-hours__table td {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--sn-color-border, #d9e2ec);
+  }
+</style>

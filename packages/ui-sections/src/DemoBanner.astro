@@ -1,0 +1,23 @@
+---
+import type { DemoBannerProps } from './component-props';
+import { DEFAULT_DEMO_BANNER_MESSAGE } from './props';
+
+interface Props extends DemoBannerProps {}
+
+const { message = DEFAULT_DEMO_BANNER_MESSAGE, class: className = '' } = Astro.props;
+---
+
+<div class={`sn-sec-demo-banner ${className}`.trim()} role="note">
+  {message}
+</div>
+
+<style>
+  .sn-sec-demo-banner {
+    background: #fff7ed;
+    border-bottom: 1px solid #fed7aa;
+    color: #9a3412;
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    text-align: center;
+  }
+</style>
