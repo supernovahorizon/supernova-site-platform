@@ -17,7 +17,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@supernova/content-schema": "workspace:*"
+    "@supernova/content-schema": "workspace:*",
+    "zod": "^3.25.67"
   },
   "devDependencies": {
     "@supernova/eslint-config": "workspace:*",
