@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.turbo/
+.astro/
+coverage/
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+.vercel/
+.netlify/
+playwright-report/
+test-results/
