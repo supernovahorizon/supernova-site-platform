@@ -1,0 +1,10 @@
+{
+  "extends": "@supernova/typescript-config/base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
+  },
+  "include": ["bin/**/*.ts", "stacks/**/*.ts", "config/**/*.ts", "tests/**/*.ts"]
+}

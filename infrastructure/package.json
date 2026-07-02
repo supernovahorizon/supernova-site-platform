@@ -1,0 +1,29 @@
+{
+  "name": "@supernova/infrastructure",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "cdk": "cdk",
+    "synth": "cdk synth",
+    "synth:all": "cdk synth --all"
+  },
+  "dependencies": {
+    "@supernova/deployment-aws": "workspace:*",
+    "aws-cdk-lib": "2.255.0",
+    "constructs": "^10.5.0"
+  },
+  "devDependencies": {
+    "@supernova/typescript-config": "workspace:*",
+    "@types/node": "^24.10.1",
+    "aws-cdk": "2.1124.1",
+    "aws-cdk-lib": "2.255.0",
+    "constructs": "^10.5.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}
