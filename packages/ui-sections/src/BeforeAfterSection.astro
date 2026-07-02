@@ -275,16 +275,21 @@ const { heading, intro, comparisons, class: className = '' } = Astro.props;
 
   @media (max-width: 40rem) {
     .sn-sec-before-after__controls {
-      grid-template-columns: 1fr;
-      position: static;
-      background: var(--sn-color-surface-elevated, #f3efe8);
-      border-radius: var(--sn-radius-md, 0.5rem);
-      margin-top: 0.75rem;
-      box-shadow: none;
+      grid-template-columns: auto 1fr auto;
+      inset-inline: 0.5rem;
+      bottom: 0.5rem;
+      padding: 0.4rem 0.6rem;
+      gap: 0.4rem;
+    }
+
+    .sn-sec-before-after__control-label {
+      display: none;
     }
 
     .sn-sec-before-after__toggle {
-      width: 100%;
+      min-height: 2.25rem;
+      padding: 0.35rem 0.65rem;
+      font-size: 0.75rem;
     }
   }
 
