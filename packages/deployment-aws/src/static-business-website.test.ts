@@ -76,9 +76,21 @@ describe('StaticBusinessWebsite', () => {
 });
 
 describe('buildStaticSiteRoutingFunctionCode', () => {
+  it('redirects cloudfront.net hosts to the canonical domain', () => {
+    const code = buildStaticSiteRoutingFunctionCode('landscaping.sites.supernovahorizon.com');
+    expect(code).toContain("host.endsWith('.cloudfront.net')");
+    expect(code).toContain(
+      "location: { value: 'https://landscaping.sites.supernovahorizon.com' + uri }",
+    );
+  });
+
   it('maps directory paths to index.html', () => {
-    const code = buildStaticSiteRoutingFunctionCode();
+    const code = buildStaticSiteRoutingFunctionCode('landscaping.sites.supernovahorizon.com');
     expect(code).toContain("uri + 'index.html'");
     expect(code).toContain("uri + '/index.html'");
+  });
+
+  it('rejects invalid canonical domains', () => {
+    expect(() => buildStaticSiteRoutingFunctionCode('invalid')).toThrow(/Invalid canonicalDomain/);
   });
 });

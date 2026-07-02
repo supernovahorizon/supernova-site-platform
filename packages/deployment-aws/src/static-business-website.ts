@@ -82,7 +82,9 @@ export class StaticBusinessWebsite extends Construct {
 
     const routingFunction = new cloudfront.Function(this, 'RoutingFunction', {
       functionName: `SupernovaStaticRouting-${props.siteId}`.slice(0, 64),
-      code: cloudfront.FunctionCode.fromInline(buildStaticSiteRoutingFunctionCode()),
+      code: cloudfront.FunctionCode.fromInline(
+        buildStaticSiteRoutingFunctionCode(props.domainName),
+      ),
     });
 
     const responseHeadersPolicy = props.enableSecurityHeaders
