@@ -4,7 +4,7 @@ Open-source, schema-driven website platform and demonstration sites for small bu
 
 ## Status
 
-Landscaping golden path milestone. The platform can generate multi-page fictional landscaping demonstration sites from validated structured content, shared sections, and a minimal `create-site` CLI. Package publication and production deployment are intentionally deferred.
+Landscaping golden path milestone. The platform can generate multi-page fictional landscaping demonstration sites from validated structured content, shared sections, and a minimal `create-site` CLI. Landscaping demos are configured for Cloudflare Pages deployment on dedicated subdomains once Pages projects are provisioned.
 
 ## Repositories
 
@@ -29,6 +29,11 @@ pnpm dev
 - `apps/demo-fashion` — fictional fashion and jewelry studio (groundwork stub)
 
 Landscaping demos are clearly marked as demonstrations and must not present fake testimonials, ratings, or revenue claims.
+
+Public demo URLs (after Cloudflare Pages provisioning):
+
+- https://landscaping.supernovahorizon.com
+- https://blue-ridge-demo.supernovahorizon.com (noindex reuse-validation demo)
 
 ## Landscaping quick start
 
