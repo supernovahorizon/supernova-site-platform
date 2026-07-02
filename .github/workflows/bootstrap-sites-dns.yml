@@ -1,0 +1,74 @@
+name: Bootstrap sites DNS delegation
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: bootstrap-sites-dns-production
+  cancel-in-progress: false
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    environment: production-demos
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Quality checks
+        run: |
+          pnpm format:check
+          pnpm lint
+          pnpm typecheck
+          pnpm test
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEMO_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_DEPLOYMENT_REGION || 'us-east-1' }}
+
+      - name: Deploy Route 53 hosted zone
+        working-directory: infrastructure
+        run: |
+          pnpm exec cdk deploy SupernovaWebDnsStack \
+            --app "npx tsx bin/bootstrap-web-dns.ts" \
+            --require-approval never \
+            --outputs-file cdk-outputs.json
+
+      - name: Read Route 53 name servers
+        id: nameservers
+        working-directory: infrastructure
+        run: |
+          NS="$(node -e "const o=require('./cdk-outputs.json'); console.log(o.SupernovaWebDnsStack.NameServers)")"
+          echo "nameservers=${NS}" >> "$GITHUB_OUTPUT"
+          echo "hosted_zone_id=$(node -e "const o=require('./cdk-outputs.json'); console.log(o.SupernovaWebDnsStack.HostedZoneId)")" >> "$GITHUB_OUTPUT"
+
+      - name: Delegate subdomain in Cloudflare
+        env:
+          CLOUDFLARE_ZONE_ID: ${{ vars.CLOUDFLARE_ZONE_ID }}
+          CLOUDFLARE_DNS_API_TOKEN: ${{ secrets.CLOUDFLARE_DNS_API_TOKEN }}
+          ROUTE53_NAME_SERVERS: ${{ steps.nameservers.outputs.nameservers }}
+        run: bash infrastructure/scripts/delegate-cloudflare-ns.sh
+
+      - name: Summary
+        run: |
+          {
+            echo "## Sites DNS bootstrap"
+            echo "- Hosted zone ID: ${{ steps.nameservers.outputs.hosted_zone_id }}"
+            echo "- Name servers: ${{ steps.nameservers.outputs.nameservers }}"
+            echo "- Delegated zone: sites.supernovahorizon.com"
+          } >> "$GITHUB_STEP_SUMMARY"

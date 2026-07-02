@@ -1,0 +1,165 @@
+name: Deploy demo websites
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/demo-landscaping/**'
+      - 'apps/demo-landscaping-blue-ridge/**'
+      - 'packages/**'
+      - 'infrastructure/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'turbo.json'
+      - '.github/workflows/deploy-demos.yml'
+  workflow_dispatch:
+    inputs:
+      deploy_target:
+        description: 'Deploy target'
+        required: false
+        default: all
+        type: choice
+        options:
+          - all
+          - landscaping
+          - blue-ridge
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      landscaping: ${{ steps.filter.outputs.landscaping }}
+      blue_ridge: ${{ steps.filter.outputs.blue_ridge }}
+      shared: ${{ steps.filter.outputs.shared }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            landscaping:
+              - 'apps/demo-landscaping/**'
+            blue_ridge:
+              - 'apps/demo-landscaping-blue-ridge/**'
+            shared:
+              - 'packages/**'
+              - 'infrastructure/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - 'pnpm-workspace.yaml'
+              - 'turbo.json'
+              - '.github/workflows/deploy-demos.yml'
+
+  deploy-landscaping:
+    needs: changes
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      (github.event.inputs.deploy_target == 'all' || github.event.inputs.deploy_target == 'landscaping') ||
+      (github.event_name == 'push' && (needs.changes.outputs.landscaping == 'true' || needs.changes.outputs.shared == 'true'))
+    runs-on: ubuntu-latest
+    environment: production-demos
+    concurrency:
+      group: deploy-demo-landscaping-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: |
+          pnpm format:check
+          pnpm lint
+          pnpm typecheck
+          pnpm test
+          pnpm --filter @supernova/demo-landscaping build
+      - working-directory: infrastructure
+        run: pnpm test
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEMO_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_DEPLOYMENT_REGION || 'us-east-1' }}
+      - name: CDK synth and diff
+        working-directory: infrastructure
+        env:
+          DEPLOY_TARGET: landscaping
+          SITES_HOSTED_ZONE_ID: ${{ vars.SITES_HOSTED_ZONE_ID }}
+        run: |
+          pnpm exec cdk synth SupernovaLandscapingDemoStack --quiet
+          pnpm exec cdk diff SupernovaLandscapingDemoStack || true
+      - name: Deploy landscaping demo
+        working-directory: infrastructure
+        env:
+          DEPLOY_TARGET: landscaping
+          SITES_HOSTED_ZONE_ID: ${{ vars.SITES_HOSTED_ZONE_ID }}
+        run: |
+          pnpm exec cdk deploy SupernovaLandscapingDemoStack \
+            --require-approval never \
+            --outputs-file cdk-outputs-landscaping.json
+      - name: Smoke test
+        run: bash infrastructure/scripts/smoke-test-demo.sh https://landscaping.sites.supernovahorizon.com true
+      - name: Summary
+        run: echo "Deployed https://landscaping.sites.supernovahorizon.com" >> "$GITHUB_STEP_SUMMARY"
+
+  deploy-blue-ridge:
+    needs: changes
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      (github.event.inputs.deploy_target == 'all' || github.event.inputs.deploy_target == 'blue-ridge') ||
+      (github.event_name == 'push' && (needs.changes.outputs.blue_ridge == 'true' || needs.changes.outputs.shared == 'true'))
+    runs-on: ubuntu-latest
+    environment: production-demos
+    concurrency:
+      group: deploy-demo-blue-ridge-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: |
+          pnpm format:check
+          pnpm lint
+          pnpm typecheck
+          pnpm test
+          pnpm --filter @supernova/demo-landscaping-blue-ridge build
+      - working-directory: infrastructure
+        run: pnpm test
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEMO_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_DEPLOYMENT_REGION || 'us-east-1' }}
+      - name: CDK synth and diff
+        working-directory: infrastructure
+        env:
+          DEPLOY_TARGET: blue-ridge
+          SITES_HOSTED_ZONE_ID: ${{ vars.SITES_HOSTED_ZONE_ID }}
+        run: |
+          pnpm exec cdk synth SupernovaBlueRidgeDemoStack --quiet
+          pnpm exec cdk diff SupernovaBlueRidgeDemoStack || true
+      - name: Deploy Blue Ridge demo
+        working-directory: infrastructure
+        env:
+          DEPLOY_TARGET: blue-ridge
+          SITES_HOSTED_ZONE_ID: ${{ vars.SITES_HOSTED_ZONE_ID }}
+        run: |
+          pnpm exec cdk deploy SupernovaBlueRidgeDemoStack \
+            --require-approval never \
+            --outputs-file cdk-outputs-blue-ridge.json
+      - name: Smoke test
+        run: bash infrastructure/scripts/smoke-test-demo.sh https://blue-ridge.sites.supernovahorizon.com false
+      - name: Summary
+        run: echo "Deployed https://blue-ridge.sites.supernovahorizon.com" >> "$GITHUB_STEP_SUMMARY"
