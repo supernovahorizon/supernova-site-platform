@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "playwright test",
+    "test:e2e": "playwright test",
     "test:evergreen": "SITE=evergreen playwright test",
     "test:blue-ridge": "SITE=blue-ridge playwright test"
   },

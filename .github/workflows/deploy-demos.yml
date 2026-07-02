@@ -84,7 +84,7 @@ jobs:
       - name: Install Playwright browsers
         run: pnpm --dir tests/landscaping-demos exec playwright install chromium
       - name: E2E smoke tests (Evergreen)
-        run: SITE=evergreen pnpm --dir tests/landscaping-demos test
+        run: SITE=evergreen pnpm --dir tests/landscaping-demos test:e2e
       - working-directory: infrastructure
         run: pnpm test
       - name: Configure AWS credentials
@@ -142,7 +142,7 @@ jobs:
       - name: Install Playwright browsers
         run: pnpm --dir tests/landscaping-demos exec playwright install chromium
       - name: E2E smoke tests (Blue Ridge)
-        run: SITE=blue-ridge pnpm --dir tests/landscaping-demos test
+        run: SITE=blue-ridge pnpm --dir tests/landscaping-demos test:e2e
       - working-directory: infrastructure
         run: pnpm test
       - name: Configure AWS credentials
