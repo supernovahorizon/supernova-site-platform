@@ -145,7 +145,7 @@ export const blueRidgeTokens: ThemeTokens = {
     textMuted: '#9aa8b5',
     primary: '#3d6b8a',
     accent: '#5ba4d9',
-    accentContrast: '#0f1419',
+    accentContrast: '#ffffff',
     border: '#2e3a45',
     overlay: 'rgb(8 12 16 / 62%)',
   },
@@ -174,6 +174,11 @@ export function getThemeTokens(themeId: ThemeConfig['id']): ThemeTokens {
 
 export function themeTokensToCss(tokens: ThemeTokens): string {
   return `:root {
+  --sn-space-xs: 0.5rem;
+  --sn-space-sm: 0.75rem;
+  --sn-space-md: 1rem;
+  --sn-space-lg: 1.5rem;
+  --sn-space-xl: 2.5rem;
   --sn-color-background: ${tokens.color.background};
   --sn-color-surface: ${tokens.color.surface};
   --sn-color-surface-elevated: ${tokens.color.surfaceElevated};
