@@ -36,6 +36,6 @@ fi
 curl -fsS "${SITE_URL}/robots.txt" >/tmp/robots.txt
 curl -fsS "${SITE_URL}/sitemap.xml" >/tmp/sitemap.xml
 curl -fsS -o /dev/null -w "%{http_code}" "${SITE_URL}/services/" | grep -q '200'
-curl -fsS -o /dev/null -w "%{http_code}" "${SITE_URL}/does-not-exist-page" | grep -q '404'
+curl -sS -o /dev/null -w "%{http_code}" "${SITE_URL}/does-not-exist-page" | grep -q '404'
 
 echo "Smoke test passed for ${SITE_URL}"

@@ -168,6 +168,6 @@ jobs:
             --require-approval never \
             --outputs-file cdk-outputs-blue-ridge.json
       - name: Smoke test
-        run: bash infrastructure/scripts/smoke-test-demo.sh https://blue-ridge.sites.supernovahorizon.com false
+        run: bash infrastructure/scripts/smoke-test-demo.sh https://blue-ridge.sites.supernovahorizon.com true
       - name: Summary
         run: echo "Deployed https://blue-ridge.sites.supernovahorizon.com" >> "$GITHUB_STEP_SUMMARY"
