@@ -118,6 +118,7 @@
         "route53:DeleteHostedZone",
         "route53:GetHostedZone",
         "route53:ListHostedZones",
+        "route53:ListHostedZonesByName",
         "route53:ChangeResourceRecordSets",
         "route53:ListResourceRecordSets",
         "route53:GetChange",
@@ -188,7 +189,17 @@
       "Resource": "*"
     },
     {
-      "Sid": "StsIdentity",
+      "Sid": "CdkBootstrapRoles",
+      "Effect": "Allow",
+      "Action": ["sts:AssumeRole"],
+      "Resource": [
+        "arn:aws:iam::094975268973:role/cdk-hnb659fds-lookup-role-094975268973-us-east-1",
+        "arn:aws:iam::094975268973:role/cdk-hnb659fds-deploy-role-094975268973-us-east-1",
+        "arn:aws:iam::094975268973:role/cdk-hnb659fds-file-publishing-role-094975268973-us-east-1"
+      ]
+    },
+    {
+      "Sid": "StsCallerIdentity",
       "Effect": "Allow",
       "Action": ["sts:GetCallerIdentity"],
       "Resource": "*"

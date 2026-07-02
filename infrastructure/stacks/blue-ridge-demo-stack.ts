@@ -15,14 +15,16 @@ export class SupernovaBlueRidgeDemoStack extends cdk.Stack {
     super(scope, id, props);
 
     const hostedZoneId = process.env.SITES_HOSTED_ZONE_ID;
-    const hostedZone = hostedZoneId
-      ? route53.HostedZone.fromHostedZoneAttributes(this, 'HostedZone', {
-          hostedZoneId,
-          zoneName: sitesDelegatedZoneName,
-        })
-      : route53.HostedZone.fromLookup(this, 'HostedZone', {
-          domainName: sitesDelegatedZoneName,
-        });
+    if (!hostedZoneId) {
+      throw new Error(
+        'SITES_HOSTED_ZONE_ID is required. Run bootstrap-sites-dns.yml and set the repository variable before deploying demos.',
+      );
+    }
+
+    const hostedZone = route53.HostedZone.fromHostedZoneAttributes(this, 'HostedZone', {
+      hostedZoneId,
+      zoneName: sitesDelegatedZoneName,
+    });
 
     new StaticBusinessWebsite(this, 'Website', {
       siteId: blueRidgeDemoConfig.siteId,
