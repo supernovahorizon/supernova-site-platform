@@ -1,5 +1,6 @@
 node_modules/
 dist/
+!packages/deployment-aws/fixtures/dist/
 cdk.out/
 infrastructure/cdk-outputs*.json
 .turbo/
