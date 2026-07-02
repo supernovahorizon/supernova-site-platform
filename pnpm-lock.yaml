@@ -406,6 +406,9 @@ importers:
       '@supernova/content-schema':
         specifier: workspace:*
         version: link:../content-schema
+      '@supernova/vertical-landscaping':
+        specifier: workspace:*
+        version: link:../vertical-landscaping
     devDependencies:
       '@supernova/eslint-config':
         specifier: workspace:*

@@ -17,7 +17,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@supernova/content-schema": "workspace:*"
+    "@supernova/content-schema": "workspace:*",
+    "@supernova/vertical-landscaping": "workspace:*"
   },
   "devDependencies": {
     "@supernova/eslint-config": "workspace:*",

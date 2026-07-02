@@ -1,7 +1,7 @@
 import type { LandscapingSiteContent } from '../landscaping-site.js';
 
 export const evergreenGroveFixture = {
-  siteUrl: 'https://demo-landscaping.example.test',
+  siteUrl: 'https://landscaping.supernovahorizon.com',
   locale: 'en-US',
   business: {
     legalName: 'Evergreen Grove Landscaping LLC',
@@ -58,7 +58,7 @@ export const evergreenGroveFixture = {
       src: '/images/hero.svg',
       alt: 'Illustrated evergreen garden hero placeholder for the demonstration site',
     },
-    robots: 'noindex,nofollow',
+    robots: 'index,follow',
   },
   analytics: { provider: 'none' },
   leadForm: {

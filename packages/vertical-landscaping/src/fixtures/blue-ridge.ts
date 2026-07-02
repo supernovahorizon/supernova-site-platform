@@ -1,7 +1,7 @@
 import type { LandscapingSiteContent } from '../landscaping-site.js';
 
 export const blueRidgeFixture = {
-  siteUrl: 'https://demo-landscaping-blue-ridge.example.test',
+  siteUrl: 'https://blue-ridge-demo.supernovahorizon.com',
   locale: 'en-US',
   business: {
     legalName: 'Blue Ridge Terrain Works LLC',
