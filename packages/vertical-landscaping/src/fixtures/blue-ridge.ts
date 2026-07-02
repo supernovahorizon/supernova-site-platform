@@ -1,14 +1,15 @@
 import type { LandscapingSiteContent } from '../landscaping-site.js';
+import { blueRidgeTheme } from '../theme.js';
 
 export const blueRidgeFixture = {
   siteUrl: 'https://blue-ridge.sites.supernovahorizon.com',
   locale: 'en-US',
   business: {
     legalName: 'Blue Ridge Terrain Works LLC',
-    displayName: 'Blue Ridge Terrain Works',
-    tagline: 'Mountain-grade planting and stonework for demonstration highlands',
+    displayName: 'Blue Ridge Outdoor Living',
+    tagline: 'Precision-built outdoor spaces.',
     description:
-      'Fictional Blue Ridge landscaping demonstration featuring erosion control, native planting, and dry-stack stonework content for the Supernova Site Platform.',
+      'Premium outdoor transformations including patios, retaining walls, outdoor kitchens, and architectural hardscape for mountain and foothill properties.',
     vertical: 'landscaping',
     isDemonstration: true,
   },
@@ -32,11 +33,11 @@ export const blueRidgeFixture = {
     notes: 'Saturday visits by fictional appointment only for demonstration scheduling copy.',
   },
   branding: {
-    logoSrc: '/images/logo.svg',
-    logoAlt: 'Blue Ridge Terrain Works demonstration logo',
-    faviconSrc: '/images/logo.svg',
-    primaryColor: '#3d5a80',
-    accentColor: '#ee6c4d',
+    logoSrc: '/images/logo.jpg',
+    logoAlt: 'Blue Ridge Outdoor Living wordmark',
+    faviconSrc: '/images/logo.jpg',
+    primaryColor: '#3d6b8a',
+    accentColor: '#5ba4d9',
     fontFamily: 'serif',
   },
   navigation: [
@@ -50,14 +51,14 @@ export const blueRidgeFixture = {
     { label: 'Quote', href: '/quote' },
   ],
   seo: {
-    titleSuffix: 'Blue Ridge Terrain Works',
+    titleSuffix: 'Blue Ridge Outdoor Living',
     defaultDescription:
-      'Fictional Blue Ridge landscaping demonstration with mountain planting, stonework, and erosion content for platform evaluation.',
+      'Blue Ridge Outdoor Living designs and builds premium patios, retaining walls, outdoor kitchens, and architectural hardscape across Asheville-area properties.',
     socialImage: {
-      src: '/images/hero.svg',
-      alt: 'Illustrated mountain ridge hero placeholder for the Blue Ridge demonstration site',
+      src: '/images/hero.jpg',
+      alt: 'Cinematic view of a premium stone patio and outdoor living space at dusk',
     },
-    robots: 'noindex,nofollow',
+    robots: 'index,follow',
   },
   analytics: { provider: 'none' },
   leadForm: {
@@ -87,7 +88,7 @@ export const blueRidgeFixture = {
       description:
         'Erosion control pages model how slope assessments, matting choices, and outlet protection can be documented for mountain properties. All specifications and timelines are illustrative placeholders.',
       heroImage: {
-        src: '/images/service-erosion.svg',
+        src: '/images/service-erosion.jpg',
         alt: 'Illustrated erosion control service placeholder with terraced slope matting',
       },
       benefits: [
@@ -105,7 +106,7 @@ export const blueRidgeFixture = {
       description:
         'Native planting content highlights seed mixes, shrub layers, and maintenance calendars for fictional Appalachian sites. Plant names and bloom windows are sample data for template testing.',
       heroImage: {
-        src: '/images/service-native.svg',
+        src: '/images/service-native.jpg',
         alt: 'Illustrated native planting service placeholder with meadow grasses and shrubs',
       },
       benefits: [
@@ -122,7 +123,7 @@ export const blueRidgeFixture = {
       description:
         'Dry-stack wall service pages show footing notes, stone sizing tables, and capstone detailing for demonstration terraces. No structural engineering claims are made in this fictional content.',
       heroImage: {
-        src: '/images/service-stonework.svg',
+        src: '/images/service-stonework.jpg',
         alt: 'Illustrated dry-stack stone wall service placeholder with layered fieldstone',
       },
       benefits: [
@@ -140,7 +141,7 @@ export const blueRidgeFixture = {
       description:
         'Trail and stair stonework demonstrates how access paths can be described with tread widths, landing sizes, and fictional coordination notes for railing vendors. Images remain neutral SVG art.',
       heroImage: {
-        src: '/images/service-trail.svg',
+        src: '/images/service-trail.jpg',
         alt: 'Illustrated trail and stair stonework service placeholder with stone steps',
       },
       benefits: [
@@ -163,7 +164,7 @@ export const blueRidgeFixture = {
       neighborhoods: ['Summit Hollow', 'Laurel Gap', 'Stonecrest Loop'],
       featuredServices: ['erosion-control', 'native-planting', 'dry-stack-walls'],
       heroImage: {
-        src: '/images/area-highlands.svg',
+        src: '/images/area-highlands.jpg',
         alt: 'Illustrated Highlands Ridge placeholder with ridge-top meadow and stone outcrop',
       },
     },
@@ -178,7 +179,7 @@ export const blueRidgeFixture = {
       neighborhoods: ['Creek Bend', 'Mossy Ford', 'Hemlock Row'],
       featuredServices: ['native-planting', 'trail-stonework', 'erosion-control'],
       heroImage: {
-        src: '/images/area-valley-creek.svg',
+        src: '/images/area-valley-creek.jpg',
         alt: 'Illustrated Valley Creek Basin placeholder with creek buffer and stone steps',
       },
     },
@@ -190,7 +191,7 @@ export const blueRidgeFixture = {
       summary: 'Demonstration dry-stack terraces with drainage weeps and native shrub pockets.',
       serviceSlug: 'dry-stack-walls',
       image: {
-        src: '/images/project-terraces.svg',
+        src: '/images/project-terraces.jpg',
         alt: 'Illustrated ridge terrace wall demonstration project',
       },
       completedLabel: 'Demo portfolio — 2025',
@@ -201,7 +202,7 @@ export const blueRidgeFixture = {
       summary: 'Fictional native seeding and erosion matting along a wind-exposed meadow edge.',
       serviceSlug: 'native-planting',
       image: {
-        src: '/images/project-meadow.svg',
+        src: '/images/project-meadow.jpg',
         alt: 'Illustrated meadow edge restoration demonstration project',
       },
       completedLabel: 'Demo portfolio — 2024',
@@ -212,7 +213,7 @@ export const blueRidgeFixture = {
       summary: 'Sample hillside stair run with landings sized for shared trail access.',
       serviceSlug: 'trail-stonework',
       image: {
-        src: '/images/project-stairs.svg',
+        src: '/images/project-stairs.jpg',
         alt: 'Illustrated creek access stone steps demonstration project',
       },
       completedLabel: 'Demo portfolio — 2025',
@@ -225,11 +226,11 @@ export const blueRidgeFixture = {
       summary:
         'Fictional before-and-after showing matting, rip rap, and native grass establishment.',
       beforeImage: {
-        src: '/images/before-slope.svg',
+        src: '/images/before-slope.jpg',
         alt: 'Illustrated before state of an eroded hillside slope',
       },
       afterImage: {
-        src: '/images/after-slope.svg',
+        src: '/images/after-slope.jpg',
         alt: 'Illustrated after state of a stabilized hillside with matting and plantings',
       },
     },
@@ -238,11 +239,11 @@ export const blueRidgeFixture = {
       title: 'Trailhead Upgrade',
       summary: 'Demonstration trailhead refresh with stone steps and edge plantings.',
       beforeImage: {
-        src: '/images/before-trail.svg',
+        src: '/images/before-trail.jpg',
         alt: 'Illustrated before state of a muddy trailhead entrance',
       },
       afterImage: {
-        src: '/images/after-trail.svg',
+        src: '/images/after-trail.jpg',
         alt: 'Illustrated after state of a trailhead with stone steps and plantings',
       },
     },
@@ -290,17 +291,17 @@ export const blueRidgeFixture = {
   ctas: [
     {
       id: 'quote-ridge',
-      headline: 'Explore a demonstration mountain project inquiry',
-      body: 'The quote form showcases service picklists, budget ranges, and consent language for fictional ridge properties.',
-      buttonLabel: 'Start an inquiry',
+      headline: 'Plan a precision-built outdoor space',
+      body: 'Share your site conditions and vision. We respond with a scoped plan, materials overview, and realistic timeline.',
+      buttonLabel: 'Plan your project',
       buttonHref: '/quote',
     },
     {
       id: 'contact-ridge',
-      headline: 'Review studio contact details',
-      body: 'See placeholder phone, email, and hours for the Blue Ridge demonstration business.',
-      buttonLabel: 'View contact page',
-      buttonHref: '/contact',
+      headline: 'See how spaces transform',
+      body: 'Browse patios, terraces, and hardscape projects designed for mountain lots and architectural outdoor living.',
+      buttonLabel: 'View transformations',
+      buttonHref: '/projects',
     },
   ],
   about: {
@@ -336,10 +337,63 @@ export const blueRidgeFixture = {
       'That path is not part of the Blue Ridge demonstration site. Use the menu to browse fictional services, areas, and projects.',
     homeHref: '/',
   },
+  theme: blueRidgeTheme,
   home: {
-    heroHeadline: 'Blue Ridge Terrain Works',
-    heroSubheadline: 'Demonstration business — fictional mountain landscaping studio',
+    heroHeadline: 'Precision-built outdoor spaces.',
+    heroSubheadline:
+      'Architectural hardscape, terraces, and outdoor living for mountain and foothill homes.',
     intro:
-      'This sibling demo reuses the same Astro pages as Evergreen Grove while swapping fixtures, branding colors, and placeholder artwork. All testimonials and metrics are fictional.',
+      'From retaining walls to outdoor kitchens, we engineer durable transformations with crisp detailing and materials chosen for slope, drainage, and daily use.',
+    trustItems: [
+      'Detailed service options',
+      'Responsive communication',
+      'Residential projects',
+      'Mobile-friendly estimates',
+    ],
+    processSteps: [
+      {
+        title: 'Tell us about the space',
+        description:
+          'Walk the site together — slope, access, utilities, and how you want to use the space.',
+      },
+      {
+        title: 'Review the plan and estimate',
+        description:
+          'Receive drawings, material selections, and phased budgets aligned to structural needs.',
+      },
+      {
+        title: 'Schedule the work',
+        description:
+          'Coordinate staging, drainage prep, and installation with clear milestone updates.',
+      },
+      {
+        title: 'Enjoy the transformation',
+        description:
+          'Complete a final walkthrough covering lighting, drainage, and seasonal maintenance.',
+      },
+    ],
+    whyChooseItems: [
+      {
+        title: 'Engineered hardscape',
+        description:
+          'Retaining walls, steps, and patios are planned for drainage, frost movement, and long-term stability on sloped lots.',
+      },
+      {
+        title: 'Cinematic outdoor living',
+        description:
+          'Fire features, lighting, and kitchen layouts are composed for evening use — not just daytime curb appeal.',
+      },
+      {
+        title: 'Mountain-site fluency',
+        description:
+          'We account for access constraints, erosion risk, and native plant palettes suited to ridge and valley microclimates.',
+      },
+    ],
+    featuredComparisonSlug: 'slope-stabilize',
+    heroMetrics: [
+      { label: 'Sample patios', value: '12+' },
+      { label: 'Terrace walls', value: '8+' },
+      { label: 'Outdoor kitchens', value: '5+' },
+    ],
   },
 } satisfies LandscapingSiteContent;

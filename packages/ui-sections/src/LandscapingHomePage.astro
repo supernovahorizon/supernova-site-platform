@@ -1,0 +1,206 @@
+---
+import HeroSection from './HeroSection.astro';
+import TrustStripSection from './TrustStripSection.astro';
+import ServiceCardsSection from './ServiceCardsSection.astro';
+import BeforeAfterSection from './BeforeAfterSection.astro';
+import ProjectGallerySection from './ProjectGallerySection.astro';
+import ProcessSection from './ProcessSection.astro';
+import WhyChooseSection from './WhyChooseSection.astro';
+import TestimonialsSection from './TestimonialsSection.astro';
+import ServiceAreaListingSection from './ServiceAreaListingSection.astro';
+import CtaBannerSection from './CtaBannerSection.astro';
+
+export interface LandscapingHomeSite {
+  theme: {
+    heroVariant: 'editorial' | 'cinematic';
+    serviceCardVariant: 'organic' | 'geometric';
+    projectGalleryVariant: 'editorial' | 'grid';
+    ctaVariant: 'warm' | 'bold';
+    sectionOrder: string[];
+  };
+  home: {
+    heroEyebrow?: string;
+    heroHeadline: string;
+    heroSubheadline: string;
+    intro: string;
+    trustItems: string[];
+    processSteps: Array<{ title: string; description: string }>;
+    whyChooseItems: Array<{ title: string; description: string }>;
+    featuredComparisonSlug?: string;
+    heroMetrics?: Array<{ label: string; value: string }>;
+  };
+  seo: { socialImage: { src: string; alt: string } };
+  services: Array<{
+    slug: string;
+    name: string;
+    summary: string;
+    heroImage?: { src: string; alt: string };
+  }>;
+  beforeAfter: Array<{
+    slug: string;
+    title: string;
+    summary: string;
+    beforeImage: { src: string; alt: string };
+    afterImage: { src: string; alt: string };
+  }>;
+  projects: Array<{
+    slug: string;
+    title: string;
+    summary: string;
+    image: { src: string; alt: string };
+    completedLabel: string;
+  }>;
+  testimonials: Array<{
+    id: string;
+    quote: string;
+    authorName: string;
+    authorContext: string;
+    isFictionalDemonstration?: boolean;
+  }>;
+  serviceAreas: Array<{
+    slug: string;
+    name: string;
+    regionLabel: string;
+    summary: string;
+  }>;
+  ctas: Array<{
+    headline: string;
+    body: string;
+    buttonLabel: string;
+    buttonHref: string;
+  }>;
+}
+
+interface Props {
+  site: LandscapingHomeSite;
+}
+
+const { site } = Astro.props;
+
+const primaryCta = site.ctas[0];
+const secondaryCta = site.ctas[1];
+const featuredComparison =
+  site.beforeAfter.find((c) => c.slug === site.home.featuredComparisonSlug) ?? site.beforeAfter[0];
+const trustVariant = site.theme.heroVariant === 'cinematic' ? 'cinematic' : 'editorial';
+---
+
+{
+  site.theme.sectionOrder.map((key) => {
+    if (key === 'hero') {
+      return (
+        <HeroSection
+          eyebrow={site.home.heroEyebrow}
+          headline={site.home.heroHeadline}
+          subheadline={site.home.heroSubheadline}
+          intro={site.home.intro}
+          image={site.seo.socialImage}
+          variant={site.theme.heroVariant}
+          metrics={site.home.heroMetrics ?? []}
+          cta={
+            primaryCta
+              ? { label: primaryCta.buttonLabel, href: primaryCta.buttonHref }
+              : undefined
+          }
+          secondaryCta={
+            secondaryCta
+              ? { label: secondaryCta.buttonLabel, href: secondaryCta.buttonHref }
+              : undefined
+          }
+        />
+      );
+    }
+
+    if (key === 'trust') {
+      return <TrustStripSection items={site.home.trustItems} variant={trustVariant} />;
+    }
+
+    if (key === 'services') {
+      return (
+        <ServiceCardsSection
+          heading="Services"
+          intro="Outcome-focused landscaping services with clear planning, communication, and care."
+          services={site.services}
+          variant={site.theme.serviceCardVariant}
+        />
+      );
+    }
+
+    if (key === 'featured' && featuredComparison) {
+      return (
+        <BeforeAfterSection
+          heading="Featured transformation"
+          intro="Drag the slider, use the buttons, or tab to the range control to compare before and after."
+          comparisons={[featuredComparison]}
+        />
+      );
+    }
+
+    if (key === 'projects') {
+      return (
+        <ProjectGallerySection
+          heading="Recent projects"
+          intro="Sample portfolio work showing layout, imagery, and project storytelling."
+          projects={site.projects}
+          variant={site.theme.projectGalleryVariant}
+        />
+      );
+    }
+
+    if (key === 'process') {
+      return (
+        <ProcessSection
+          heading="Our process"
+          intro="A straightforward path from first conversation to finished outdoor space."
+          steps={site.home.processSteps}
+          variant={trustVariant}
+        />
+      );
+    }
+
+    if (key === 'why') {
+      return (
+        <WhyChooseSection
+          heading="Why homeowners work with us"
+          items={site.home.whyChooseItems}
+          variant={trustVariant}
+        />
+      );
+    }
+
+    if (key === 'testimonials') {
+      return (
+        <TestimonialsSection
+          heading="Homeowner feedback"
+          intro="Sample quotes that show how testimonials appear on a finished client site."
+          testimonials={site.testimonials}
+        />
+      );
+    }
+
+    if (key === 'areas') {
+      return (
+        <ServiceAreaListingSection
+          heading="Service areas"
+          intro="Neighborhoods and corridors we plan routes and projects around."
+          areas={site.serviceAreas}
+        />
+      );
+    }
+
+    if (key === 'cta' && primaryCta) {
+      return (
+        <CtaBannerSection
+          headline={primaryCta.headline}
+          body={primaryCta.body}
+          buttonLabel={primaryCta.buttonLabel}
+          buttonHref={primaryCta.buttonHref}
+          secondaryButtonLabel={secondaryCta?.buttonLabel}
+          secondaryButtonHref={secondaryCta?.buttonHref}
+          variant={site.theme.ctaVariant}
+        />
+      );
+    }
+
+    return null;
+  })
+}

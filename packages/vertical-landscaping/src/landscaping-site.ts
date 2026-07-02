@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ThemeConfigSchema } from './theme.js';
 import {
   AnalyticsConfigSchema,
   BrandingSchema,
@@ -59,10 +60,41 @@ export const LandscapingSiteContentSchema = z
     about: AboutPageSchema,
     privacy: PrivacyPageSchema,
     notFound: NotFoundPageSchema,
+    theme: ThemeConfigSchema,
     home: z.object({
+      heroEyebrow: z.string().min(5).optional(),
       heroHeadline: z.string().min(5),
       heroSubheadline: z.string().min(10),
       intro: z.string().min(40),
+      trustItems: z.array(z.string().min(5)).min(2).max(6),
+      processSteps: z
+        .array(
+          z.object({
+            title: z.string().min(3),
+            description: z.string().min(10),
+          }),
+        )
+        .min(3)
+        .max(6),
+      whyChooseItems: z
+        .array(
+          z.object({
+            title: z.string().min(3),
+            description: z.string().min(20),
+          }),
+        )
+        .min(2)
+        .max(5),
+      featuredComparisonSlug: z.string().min(1).optional(),
+      heroMetrics: z
+        .array(
+          z.object({
+            label: z.string().min(3),
+            value: z.string().min(1),
+          }),
+        )
+        .max(4)
+        .optional(),
     }),
   })
   .superRefine((site, ctx) => {

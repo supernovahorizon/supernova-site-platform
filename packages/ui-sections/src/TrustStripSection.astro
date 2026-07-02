@@ -1,0 +1,73 @@
+---
+import Container from '@supernova/ui-primitives/Container.astro';
+import Section from '@supernova/ui-primitives/Section.astro';
+
+interface Props {
+  items: string[];
+  variant?: 'editorial' | 'cinematic';
+  class?: string;
+}
+
+const { items, variant = 'editorial', class: className = '' } = Astro.props;
+---
+
+<Section
+  class={`sn-sec-trust sn-sec-trust--${variant} ${className}`.trim()}
+  ariaLabel="Trust highlights"
+>
+  <Container>
+    <ul class="sn-sec-trust__list" role="list">
+      {
+        items.map((item) => (
+          <li class="sn-sec-trust__item">
+            <span class="sn-sec-trust__icon" aria-hidden="true" />
+            <span>{item}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </Container>
+</Section>
+
+<style>
+  .sn-sec-trust {
+    padding-block: var(--sn-space-md, 1rem);
+    background: var(--sn-color-surface-elevated, var(--sn-color-surface, #fff));
+    border-block: 1px solid var(--sn-color-border, #d9e2ec);
+  }
+
+  .sn-sec-trust--cinematic {
+    background: var(--sn-color-surface, #1a2229);
+  }
+
+  .sn-sec-trust__list {
+    display: grid;
+    gap: var(--sn-space-sm, 0.75rem);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  @media (min-width: 40rem) {
+    .sn-sec-trust__list {
+      grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    }
+  }
+
+  .sn-sec-trust__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--sn-color-text-muted, inherit);
+  }
+
+  .sn-sec-trust__icon {
+    flex-shrink: 0;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: var(--sn-radius-pill, 999px);
+    background: var(--sn-color-accent, #2f6f4e);
+  }
+</style>

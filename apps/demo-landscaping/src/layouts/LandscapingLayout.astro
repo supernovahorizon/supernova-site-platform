@@ -6,6 +6,7 @@ import SiteHeader from '@supernova/ui-sections/SiteHeader.astro';
 import SiteFooter from '@supernova/ui-sections/SiteFooter.astro';
 import Breadcrumbs from '@supernova/ui-sections/Breadcrumbs.astro';
 import type { BreadcrumbItem } from '@supernova/ui-sections';
+import { getThemeTokens, themeTokensToCss, getGoogleFontsUrl } from '@supernova/vertical-landscaping';
 import '@supernova/design-tokens/css';
 import '@supernova/ui-primitives/styles.css';
 import '@supernova/ui-sections/shared.css';
@@ -32,19 +33,15 @@ const metadata = buildPageMetadata({
   socialImage: site.seo.socialImage,
 });
 
-const jsonLdEntries = jsonLd
-  ? Array.isArray(jsonLd)
-    ? jsonLd
-    : [jsonLd]
-  : [];
-
-const copyrightLabel = `© ${new Date().getFullYear()} ${site.business.legalName}. Demonstration site only.`;
-const fontFamily =
-  site.branding.fontFamily === 'serif'
-    ? 'Georgia, "Times New Roman", serif'
-    : site.branding.fontFamily === 'rounded'
-      ? '"Trebuchet MS", "Segoe UI", sans-serif'
-      : 'system-ui, -apple-system, "Segoe UI", sans-serif';
+const jsonLdEntries = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+const themeTokens = getThemeTokens(site.theme.id);
+const themeCss = themeTokensToCss(themeTokens);
+const fontsUrl = getGoogleFontsUrl(site.theme.id);
+const quoteCta = site.ctas.find((cta) => cta.buttonHref === '/quote') ?? site.ctas[0];
+const copyrightLabel = `© ${new Date().getFullYear()} ${site.business.legalName}`;
+const navVariant = site.theme.navigationVariant;
+const footerVariant = site.theme.footerVariant;
+const heroImage = path === '/' ? site.seo.socialImage.src : undefined;
 ---
 
 <!doctype html>
@@ -56,7 +53,11 @@ const fontFamily =
     <meta name="description" content={metadata.description} />
     <link rel="canonical" href={metadata.canonical} />
     <meta name="robots" content={metadata.robots} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href={fontsUrl} />
     {site.branding.faviconSrc ? <link rel="icon" href={site.branding.faviconSrc} /> : null}
+    {heroImage ? <link rel="preload" as="image" href={heroImage} type="image/webp" /> : null}
     <meta property="og:title" content={metadata.openGraph.title} />
     <meta property="og:description" content={metadata.openGraph.description} />
     <meta property="og:url" content={metadata.openGraph.url} />
@@ -74,22 +75,7 @@ const fontFamily =
         <script type="application/ld+json" set:html={JSON.stringify(entry)} />
       ))
     }
-    <style
-      set:html={`:root {
-  --sn-color-accent: ${site.branding.accentColor};
-  --sn-color-primary: ${site.branding.primaryColor};
-}
-body {
-  margin: 0;
-  font-family: ${fontFamily};
-  color: var(--sn-color-text, #1f2933);
-  background: var(--sn-color-background, #f7fafc);
-}
-main:focus {
-  outline: none;
-}
-${reducedMotionCss}`}
-    />
+    <style set:html={`${themeCss}\nmain:focus { outline: none; }\n${reducedMotionCss}`} />
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -97,7 +83,12 @@ ${reducedMotionCss}`}
     <SiteHeader
       logoSrc={site.branding.logoSrc}
       logoAlt={site.branding.logoAlt}
+      displayName={site.business.displayName}
       navItems={site.navigation}
+      quoteCta={quoteCta ? { label: quoteCta.buttonLabel, href: quoteCta.buttonHref } : undefined}
+      phone={site.contact.phone}
+      variant={navVariant}
+      currentPath={path}
     />
     {breadcrumbs.length > 0 ? <Breadcrumbs items={breadcrumbs} /> : null}
     <main id="main-content" tabindex="-1">
@@ -107,6 +98,7 @@ ${reducedMotionCss}`}
       navItems={site.navigation}
       copyrightLabel={copyrightLabel}
       tagline={site.business.tagline}
+      variant={footerVariant}
     />
   </body>
 </html>
@@ -127,7 +119,7 @@ ${reducedMotionCss}`}
     width: auto;
     height: auto;
     padding: 0.5rem 0.75rem;
-    background: #ffffff;
+    background: var(--sn-color-surface, #ffffff);
     border: 2px solid var(--sn-color-accent, #2f6f4e);
     z-index: 1000;
   }

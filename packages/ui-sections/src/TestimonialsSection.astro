@@ -24,35 +24,42 @@ const showSectionLabel = requiresFictionalDemonstrationLabel(testimonials);
 
 <Section class={`sn-sec-testimonials ${className}`.trim()} ariaLabel={heading}>
   <Container>
-    <Heading level={2}>{heading}</Heading>
-    {intro ? <p class="sn-sec__intro">{intro}</p> : null}
+    <div class="sn-sec-testimonials__header">
+      <Heading level={2}>{heading}</Heading>
+      {intro ? <p class="sn-sec__intro">{intro}</p> : null}
+      {
+        showSectionLabel ? (
+          <p class="sn-sec-testimonials__section-label" role="note">
+            {fictionalDemonstrationLabel}
+          </p>
+        ) : null
+      }
+    </div>
 
-    {
-      showSectionLabel ? (
-        <p class="sn-sec-testimonials__section-label" role="note">
-          {fictionalDemonstrationLabel}
-        </p>
-      ) : null
-    }
-
-    <div class="sn-sec__grid sn-sec__grid--cards">
+    <div class="sn-sec-testimonials__grid">
       {
         testimonials.map((testimonial) => {
           const itemLabel = getFictionalDemonstrationLabel(
             testimonial.isFictionalDemonstration,
             fictionalDemonstrationLabel,
           );
+          const initial = testimonial.authorName.trim().charAt(0).toUpperCase();
 
           return (
-            <figure class="sn-sec__card sn-sec-testimonials__item">
+            <figure class="sn-sec-testimonials__item" id={`testimonial-${testimonial.id}`}>
+              {itemLabel ? <span class="sn-sec-testimonials__badge">{itemLabel}</span> : null}
               <blockquote cite={`#testimonial-${testimonial.id}`}>
-                <p>{testimonial.quote}</p>
+                <p>“{testimonial.quote}”</p>
               </blockquote>
-              <figcaption>
-                <strong>{testimonial.authorName}</strong>
-                <span class="sn-sec__muted"> — {testimonial.authorContext}</span>
+              <figcaption class="sn-sec-testimonials__author">
+                <span class="sn-sec-testimonials__avatar" aria-hidden="true">
+                  {initial}
+                </span>
+                <span>
+                  <strong>{testimonial.authorName}</strong>
+                  <span class="sn-sec-testimonials__context">{testimonial.authorContext}</span>
+                </span>
               </figcaption>
-              {itemLabel ? <p class="sn-sec-testimonials__item-label">{itemLabel}</p> : null}
             </figure>
           );
         })
@@ -62,23 +69,89 @@ const showSectionLabel = requiresFictionalDemonstrationLabel(testimonials);
 </Section>
 
 <style>
-  .sn-sec-testimonials__section-label,
-  .sn-sec-testimonials__item-label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #9a3412;
-    margin: 0 0 var(--sn-space-sm, 0.75rem);
+  .sn-sec-testimonials__header {
+    margin-bottom: var(--sn-space-lg, 1.5rem);
+  }
+
+  .sn-sec-testimonials__section-label {
+    display: inline-flex;
+    margin: 0.75rem 0 0;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--sn-radius-pill, 999px);
+    background: color-mix(in srgb, var(--sn-color-accent, #c46b4a) 12%, transparent);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--sn-color-text-muted, inherit);
+  }
+
+  .sn-sec-testimonials__grid {
+    display: grid;
+    gap: var(--sn-space-md, 1rem);
+  }
+
+  @media (min-width: 40rem) {
+    .sn-sec-testimonials__grid {
+      grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    }
+  }
+
+  .sn-sec-testimonials__item {
+    margin: 0;
+    padding: var(--sn-space-lg, 1.5rem);
+    background: var(--sn-color-surface, #fff);
+    border: 1px solid var(--sn-color-border, #d9e2ec);
+    border-radius: var(--sn-radius-xl, 1.75rem);
+    box-shadow: var(--sn-shadow-sm, none);
+  }
+
+  .sn-sec-testimonials__badge {
+    display: inline-block;
+    margin-bottom: 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--sn-color-accent, #c46b4a);
   }
 
   .sn-sec-testimonials__item blockquote {
-    margin: 0 0 var(--sn-space-sm, 0.75rem);
+    margin: 0 0 var(--sn-space-md, 1rem);
+    font-family: var(--sn-font-display, inherit);
+    font-size: 1.0625rem;
+    line-height: 1.55;
   }
 
   .sn-sec-testimonials__item blockquote p {
     margin: 0;
   }
 
-  .sn-sec-testimonials__item figcaption {
+  .sn-sec-testimonials__author {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     margin: 0;
+  }
+
+  .sn-sec-testimonials__avatar {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--sn-radius-pill, 999px);
+    background: color-mix(in srgb, var(--sn-color-primary, #2f5d44) 14%, transparent);
+    color: var(--sn-color-primary, #2f5d44);
+    font-weight: 700;
+  }
+
+  .sn-sec-testimonials__author strong {
+    display: block;
+  }
+
+  .sn-sec-testimonials__context {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--sn-color-text-muted, inherit);
   }
 </style>

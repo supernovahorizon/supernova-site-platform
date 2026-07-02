@@ -20,8 +20,13 @@ export type DemoBannerProps = {
 export type SiteHeaderProps = {
   logoSrc: string;
   logoAlt: string;
+  displayName?: string;
   homeHref?: string;
   navItems: NavigationItem[];
+  quoteCta?: { label: string; href: string };
+  phone?: string;
+  variant?: 'editorial' | 'cinematic';
+  currentPath?: string;
   class?: string;
 };
 
@@ -29,23 +34,34 @@ export type SiteFooterProps = {
   navItems?: NavigationItem[];
   copyrightLabel: string;
   tagline?: string;
+  disclaimer?: string;
+  variant?: 'light' | 'dark';
   class?: string;
 };
 
 export type HeroSectionProps = {
   headline: string;
   subheadline: string;
+  eyebrow?: string;
   intro?: string;
   image?: { src: string; alt: string };
   cta?: { label: string; href: string };
+  secondaryCta?: { label: string; href: string };
+  variant?: 'editorial' | 'cinematic';
+  metrics?: Array<{ label: string; value: string }>;
   class?: string;
+};
+
+export type ServiceCardItemWithImage = ServiceCardItem & {
+  heroImage?: { src: string; alt: string };
 };
 
 export type ServiceCardsSectionProps = {
   heading: string;
   intro?: string;
-  services: ServiceCardItem[];
+  services: ServiceCardItemWithImage[];
   serviceBasePath?: string;
+  variant?: 'organic' | 'geometric';
   class?: string;
 };
 
@@ -62,6 +78,9 @@ export type CtaBannerSectionProps = {
   body: string;
   buttonLabel: string;
   buttonHref: string;
+  secondaryButtonLabel?: string;
+  secondaryButtonHref?: string;
+  variant?: 'warm' | 'bold';
   class?: string;
 };
 
@@ -85,6 +104,7 @@ export type ProjectGallerySectionProps = {
   intro?: string;
   projects: ProjectGalleryItem[];
   projectBasePath?: string;
+  variant?: 'editorial' | 'grid';
   class?: string;
 };
 

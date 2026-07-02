@@ -1,17 +1,9 @@
 ---
 import { createLocalBusinessJsonLd } from '@supernova/structured-data';
-import HeroSection from '@supernova/ui-sections/HeroSection.astro';
-import ServiceCardsSection from '@supernova/ui-sections/ServiceCardsSection.astro';
-import ServiceAreaListingSection from '@supernova/ui-sections/ServiceAreaListingSection.astro';
-import TestimonialsSection from '@supernova/ui-sections/TestimonialsSection.astro';
-import CtaBannerSection from '@supernova/ui-sections/CtaBannerSection.astro';
-import BeforeAfterSection from '@supernova/ui-sections/BeforeAfterSection.astro';
+import LandscapingHomePage from '@supernova/ui-sections/LandscapingHomePage.astro';
 
 import LandscapingLayout from '../layouts/LandscapingLayout.astro';
 import { site } from '../site';
-
-const primaryCta = site.ctas[0];
-const secondaryCta = site.ctas[1];
 
 const jsonLd = createLocalBusinessJsonLd({
   business: site.business,
@@ -25,59 +17,5 @@ const jsonLd = createLocalBusinessJsonLd({
   path="/"
   jsonLd={jsonLd}
 >
-  <HeroSection
-    headline={site.home.heroHeadline}
-    subheadline={site.home.heroSubheadline}
-    intro={site.home.intro}
-    image={site.seo.socialImage}
-    cta={primaryCta
-      ? { label: primaryCta.buttonLabel, href: primaryCta.buttonHref }
-      : undefined}
-  />
-
-  <ServiceCardsSection
-    heading="Demonstration services"
-    intro="Fictional service catalog rendered from shared landscaping content."
-    services={site.services}
-  />
-
-  <ServiceAreaListingSection
-    heading="Service areas"
-    intro="Sample neighborhoods used to test localized service-area pages."
-    areas={site.serviceAreas}
-  />
-
-  <BeforeAfterSection
-    heading="Before and after placeholders"
-    intro="Neutral SVG panels illustrate gallery composition without real job photos."
-    comparisons={site.beforeAfter}
-  />
-
-  <TestimonialsSection
-    heading="Demonstration testimonials"
-    intro="Quotes are fictional and labeled for template evaluation."
-    testimonials={site.testimonials}
-  />
-
-  {
-    primaryCta ? (
-      <CtaBannerSection
-        headline={primaryCta.headline}
-        body={primaryCta.body}
-        buttonLabel={primaryCta.buttonLabel}
-        buttonHref={primaryCta.buttonHref}
-      />
-    ) : null
-  }
-
-  {
-    secondaryCta ? (
-      <CtaBannerSection
-        headline={secondaryCta.headline}
-        body={secondaryCta.body}
-        buttonLabel={secondaryCta.buttonLabel}
-        buttonHref={secondaryCta.buttonHref}
-      />
-    ) : null
-  }
+  <LandscapingHomePage site={site} />
 </LandscapingLayout>

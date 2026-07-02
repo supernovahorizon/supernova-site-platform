@@ -2,6 +2,7 @@
 import Container from '@supernova/ui-primitives/Container.astro';
 import Section from '@supernova/ui-primitives/Section.astro';
 import Heading from '@supernova/ui-primitives/Heading.astro';
+import ResponsiveImage from './ResponsiveImage.astro';
 import type { ProjectGallerySectionProps } from './component-props';
 import { resolveProjectHref } from './props';
 
@@ -12,28 +13,42 @@ const {
   intro,
   projects,
   projectBasePath = '/projects',
+  variant = 'editorial',
   class: className = '',
 } = Astro.props;
 ---
 
-<Section class={`sn-sec-gallery ${className}`.trim()} ariaLabel={heading}>
+<Section class={`sn-sec-gallery sn-sec-gallery--${variant} ${className}`.trim()} ariaLabel={heading}>
   <Container>
-    <Heading level={2}>{heading}</Heading>
-    {intro ? <p class="sn-sec__intro">{intro}</p> : null}
+    <div class="sn-sec-gallery__header">
+      <Heading level={2}>{heading}</Heading>
+      {intro ? <p class="sn-sec__intro">{intro}</p> : null}
+    </div>
 
     <div class="sn-sec-gallery__grid">
       {
-        projects.map((project) => {
+        projects.map((project, index) => {
           const href = resolveProjectHref(project, projectBasePath);
+          const featured = variant === 'editorial' && index === 0;
 
           return (
-            <article class="sn-sec__card sn-sec-gallery__item">
-              <a class="sn-sec__card-link" href={href}>
-                <img src={project.image.src} alt={project.image.alt} loading="lazy" />
-                <Heading level={3}>{project.title}</Heading>
+            <article class={`sn-sec-gallery__item${featured ? ' sn-sec-gallery__item--featured' : ''}`}>
+              <a class="sn-sec-gallery__link" href={href}>
+                <div class="sn-sec-gallery__media">
+                  <ResponsiveImage
+                    src={project.image.src}
+                    alt={project.image.alt}
+                    width={960}
+                    height={featured ? 720 : 640}
+                    sizes={featured ? '(min-width: 48rem) 66vw, 100vw' : '(min-width: 48rem) 33vw, 100vw'}
+                  />
+                </div>
+                <div class="sn-sec-gallery__body">
+                  <Heading level={3}>{project.title}</Heading>
+                  <p>{project.summary}</p>
+                  <p class="sn-sec-gallery__meta">{project.completedLabel}</p>
+                </div>
               </a>
-              <p>{project.summary}</p>
-              <p class="sn-sec__muted">{project.completedLabel}</p>
             </article>
           );
         })
@@ -43,17 +58,86 @@ const {
 </Section>
 
 <style>
+  .sn-sec-gallery__header {
+    margin-bottom: var(--sn-space-lg, 1.5rem);
+  }
+
   .sn-sec-gallery__grid {
     display: grid;
     gap: var(--sn-space-md, 1rem);
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
   }
 
-  .sn-sec-gallery__item img {
-    display: block;
-    width: 100%;
-    height: auto;
-    border-radius: var(--sn-radius-sm, 0.25rem);
-    margin-bottom: var(--sn-space-sm, 0.75rem);
+  .sn-sec-gallery--editorial .sn-sec-gallery__grid {
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 48rem) {
+    .sn-sec-gallery--editorial .sn-sec-gallery__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .sn-sec-gallery--editorial .sn-sec-gallery__item--featured {
+      grid-column: span 2;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+
+    .sn-sec-gallery--grid .sn-sec-gallery__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .sn-sec-gallery__item {
+    overflow: hidden;
+    background: var(--sn-color-surface, #fff);
+    border: 1px solid var(--sn-color-border, #d9e2ec);
+    border-radius: var(--sn-radius-lg, 1rem);
+    box-shadow: var(--sn-shadow-sm, none);
+  }
+
+  .sn-sec-gallery--grid .sn-sec-gallery__item {
+    border-radius: var(--sn-radius-md, 0.5rem);
+  }
+
+  .sn-sec-gallery__link {
+    display: grid;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .sn-sec-gallery__media {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+
+  .sn-sec-gallery__media :global(img) {
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .sn-sec-gallery__item:hover .sn-sec-gallery__media :global(img) {
+      transform: scale(1.04);
+    }
+  }
+
+  .sn-sec-gallery__body {
+    padding: var(--sn-space-md, 1rem) var(--sn-space-lg, 1.5rem) var(--sn-space-lg, 1.5rem);
+  }
+
+  .sn-sec-gallery__body p {
+    margin: 0.35rem 0 0;
+    color: var(--sn-color-text-muted, inherit);
+    font-size: 0.9375rem;
+  }
+
+  .sn-sec-gallery__meta {
+    margin-top: 0.5rem !important;
+    font-size: 0.8125rem !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
 </style>

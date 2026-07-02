@@ -1,5 +1,51 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: var(--sn-font-body, system-ui, sans-serif);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--sn-color-text, #1f2933);
+  background: var(--sn-color-background, #f8faf8);
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--sn-font-heading, inherit);
+  line-height: 1.2;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
 .sn-sec {
-  padding-block: var(--sn-space-xl, 2.5rem);
+  padding-block: clamp(2.5rem, 5vw, 4rem);
 }
 
 .sn-sec--compact {
@@ -9,7 +55,8 @@
 .sn-sec__intro {
   margin: 0 0 var(--sn-space-lg, 1.5rem);
   max-width: 65ch;
-  color: var(--sn-color-text, #1f2933);
+  color: var(--sn-color-text-muted, var(--sn-color-text, #1f2933));
+  font-size: 1.0625rem;
 }
 
 .sn-sec__grid {
@@ -18,19 +65,31 @@
 }
 
 .sn-sec__grid--cards {
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 40rem) {
+  .sn-sec__grid--cards {
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  }
 }
 
 .sn-sec__card {
   background: var(--sn-color-surface, #ffffff);
   border: 1px solid var(--sn-color-border, #d9e2ec);
-  border-radius: var(--sn-radius-md, 0.5rem);
+  border-radius: var(--sn-radius-lg, 1rem);
   padding: var(--sn-space-md, 1rem);
+  box-shadow: var(--sn-shadow-sm, none);
 }
 
 .sn-sec__card-link {
   color: inherit;
   text-decoration: none;
+}
+
+.sn-sec__card-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
 }
 
 .sn-sec__card-link:focus-visible,
@@ -43,12 +102,101 @@
 .sn-sec__form select:focus-visible,
 .sn-sec__form textarea:focus-visible,
 .sn-sec__form button:focus-visible,
-.sn-sec__summary:focus-visible {
+.sn-sec__summary:focus-visible,
+.sn-btn:focus-visible {
   outline: 3px solid var(--sn-color-accent, #2f6f4e);
   outline-offset: 3px;
 }
 
 .sn-sec__muted {
-  color: color-mix(in srgb, var(--sn-color-text, #1f2933) 70%, transparent);
-  font-size: 0.95rem;
+  color: var(
+    --sn-color-text-muted,
+    color-mix(in srgb, var(--sn-color-text, #1f2933) 70%, transparent)
+  );
+  font-size: 0.9375rem;
+}
+
+.sn-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+  padding: 0.75rem 1.35rem;
+  border-radius: var(--sn-radius-pill, 999px);
+  font: inherit;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sn-btn {
+    transition: none;
+  }
+}
+
+.sn-btn--primary {
+  background: var(--sn-color-accent, #2f6f4e);
+  color: var(--sn-color-accent-contrast, #fff);
+}
+
+.sn-btn--primary:hover {
+  filter: brightness(1.05);
+}
+
+.sn-btn--secondary {
+  background: transparent;
+  color: inherit;
+  border-color: color-mix(in srgb, currentColor 35%, transparent);
+}
+
+.sn-btn--ghost {
+  background: transparent;
+  color: var(--sn-color-accent, #2f6f4e);
+  border-color: var(--sn-color-border, #d9e2ec);
+}
+
+.sn-sec__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.75rem 1.35rem;
+  border: 0;
+  border-radius: var(--sn-radius-pill, 999px);
+  background: var(--sn-color-accent, #2f6f4e);
+  color: var(--sn-color-accent-contrast, #ffffff);
+  font: inherit;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.sn-sec__button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.sn-sec__nav-link {
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.35rem 0;
+}
+
+.sn-sec__nav-link:hover {
+  color: var(--sn-color-accent, #2f6f4e);
+}
+
+.sn-sec__nav-link[aria-current='page'] {
+  color: var(--sn-color-accent, #2f6f4e);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }

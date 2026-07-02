@@ -24,6 +24,11 @@
     "./QuoteRequestFormSection.astro": "./src/QuoteRequestFormSection.astro",
     "./Breadcrumbs.astro": "./src/Breadcrumbs.astro",
     "./DemoBanner.astro": "./src/DemoBanner.astro",
+    "./TrustStripSection.astro": "./src/TrustStripSection.astro",
+    "./ProcessSection.astro": "./src/ProcessSection.astro",
+    "./WhyChooseSection.astro": "./src/WhyChooseSection.astro",
+    "./ResponsiveImage.astro": "./src/ResponsiveImage.astro",
+    "./LandscapingHomePage.astro": "./src/LandscapingHomePage.astro",
     "./shared.css": "./src/shared.css"
   },
   "scripts": {

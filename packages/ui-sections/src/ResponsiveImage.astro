@@ -1,0 +1,61 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  loading?: 'eager' | 'lazy';
+  fetchpriority?: 'high' | 'low' | 'auto';
+  sizes?: string;
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  loading = 'lazy',
+  fetchpriority,
+  sizes = '100vw',
+  class: className = '',
+} = Astro.props;
+
+const base = src.replace(/\.(jpg|jpeg|png|webp|avif)$/i, '');
+const hasVariants = !src.endsWith('.svg');
+---
+
+<picture class={className}>
+  {
+    hasVariants ? (
+      <>
+        <source srcset={`${base}.avif`} type="image/avif" sizes={sizes} />
+        <source srcset={`${base}.webp`} type="image/webp" sizes={sizes} />
+      </>
+    ) : null
+  }
+  <img
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    fetchpriority={fetchpriority}
+    decoding="async"
+    style={`aspect-ratio: ${width} / ${height};`}
+  />
+</picture>
+
+<style>
+  picture {
+    display: block;
+    overflow: hidden;
+  }
+
+  picture img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+</style>

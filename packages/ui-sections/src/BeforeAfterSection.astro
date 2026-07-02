@@ -2,6 +2,7 @@
 import Container from '@supernova/ui-primitives/Container.astro';
 import Section from '@supernova/ui-primitives/Section.astro';
 import Heading from '@supernova/ui-primitives/Heading.astro';
+import ResponsiveImage from './ResponsiveImage.astro';
 import type { BeforeAfterSectionProps } from './component-props';
 
 interface Props extends BeforeAfterSectionProps {}
@@ -17,42 +18,60 @@ const { heading, intro, comparisons, class: className = '' } = Astro.props;
     <div class="sn-sec-before-after__list">
       {
         comparisons.map((comparison) => (
-          <article class="sn-sec__card sn-sec-before-after__item">
+          <article class="sn-sec-before-after__item">
             <Heading level={3}>{comparison.title}</Heading>
-            <p>{comparison.summary}</p>
+            <p class="sn-sec-before-after__summary">{comparison.summary}</p>
 
             <div
               class="sn-sec-before-after__compare"
               data-before-after
-              style={`--sn-before-after-position: 50%;`}
+              data-comparison-id={comparison.slug}
+              style="--sn-before-after-position: 50%;"
             >
-              <img
-                class="sn-sec-before-after__image sn-sec-before-after__image--before"
-                src={comparison.beforeImage.src}
-                alt={comparison.beforeImage.alt}
-                loading="lazy"
-              />
+              <div class="sn-sec-before-after__image sn-sec-before-after__image--before">
+                <ResponsiveImage
+                  src={comparison.beforeImage.src}
+                  alt={comparison.beforeImage.alt}
+                  width={1280}
+                  height={800}
+                  sizes="(min-width: 48rem) 70vw, 100vw"
+                />
+              </div>
               <div class="sn-sec-before-after__after-wrap">
-                <img
-                  class="sn-sec-before-after__image sn-sec-before-after__image--after"
+                <ResponsiveImage
                   src={comparison.afterImage.src}
                   alt={comparison.afterImage.alt}
-                  loading="lazy"
+                  width={1280}
+                  height={800}
+                  sizes="(min-width: 48rem) 70vw, 100vw"
                 />
               </div>
 
-              <label class="sn-sec-before-after__control">
-                <span class="sn-sec-before-after__control-label">Drag to compare before and after</span>
-                <input
-                  class="sn-sec__slider"
-                  type="range"
-                  min="0"
-                  max="100"
-                  value="50"
-                  aria-label={`Compare before and after for ${comparison.title}`}
-                  data-before-after-slider
-                />
-              </label>
+              <div class="sn-sec-before-after__labels" aria-hidden="true">
+                <span>Before</span>
+                <span>After</span>
+              </div>
+
+              <div class="sn-sec-before-after__controls">
+                <button type="button" class="sn-sec-before-after__toggle" data-show-before>
+                  Show before
+                </button>
+                <label class="sn-sec-before-after__slider-wrap">
+                  <span class="sn-sec-before-after__control-label">Compare before and after</span>
+                  <input
+                    class="sn-sec__slider"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="50"
+                    aria-label={`Compare before and after for ${comparison.title}`}
+                    data-before-after-slider
+                  />
+                </label>
+                <button type="button" class="sn-sec-before-after__toggle" data-show-after>
+                  Show after
+                </button>
+              </div>
             </div>
           </article>
         ))
@@ -66,13 +85,14 @@ const { heading, intro, comparisons, class: className = '' } = Astro.props;
 
   for (const compare of document.querySelectorAll('[data-before-after]')) {
     const slider = compare.querySelector('[data-before-after-slider]');
+    const showBefore = compare.querySelector('[data-show-before]');
+    const showAfter = compare.querySelector('[data-show-after]');
 
-    if (!(slider instanceof HTMLInputElement)) {
-      continue;
-    }
+    if (!(slider instanceof HTMLInputElement)) continue;
 
     const updatePosition = (value: string) => {
       compare.style.setProperty('--sn-before-after-position', `${value}%`);
+      slider.value = value;
     };
 
     if (prefersReducedMotion) {
@@ -85,40 +105,118 @@ const { heading, intro, comparisons, class: className = '' } = Astro.props;
 
     updatePosition(slider.value);
     slider.addEventListener('input', () => updatePosition(slider.value));
+    showBefore?.addEventListener('click', () => updatePosition('0'));
+    showAfter?.addEventListener('click', () => updatePosition('100'));
   }
 </script>
 
 <style>
   .sn-sec-before-after__list {
     display: grid;
-    gap: var(--sn-space-lg, 1.5rem);
+    gap: var(--sn-space-xl, 2.5rem);
+  }
+
+  .sn-sec-before-after__summary {
+    margin: 0.35rem 0 0;
+    color: var(--sn-color-text-muted, inherit);
+    max-width: 60ch;
   }
 
   .sn-sec-before-after__compare {
     position: relative;
     overflow: hidden;
-    border-radius: var(--sn-radius-md, 0.5rem);
+    border-radius: var(--sn-radius-lg, 1rem);
     margin-top: var(--sn-space-md, 1rem);
     aspect-ratio: 16 / 10;
     background: var(--sn-color-border, #d9e2ec);
-  }
-
-  .sn-sec-before-after__image {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    box-shadow: var(--sn-shadow-md, none);
   }
 
   .sn-sec-before-after__image--before {
     position: absolute;
     inset: 0;
+    z-index: 1;
+  }
+
+  .sn-sec-before-after__compare :global(picture),
+  .sn-sec-before-after__compare :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .sn-sec-before-after__after-wrap {
     position: absolute;
     inset: 0;
+    z-index: 2;
     clip-path: inset(0 0 0 var(--sn-before-after-position, 50%));
+  }
+
+  .sn-sec-before-after__labels {
+    position: absolute;
+    inset-inline: 0.75rem;
+    top: 0.75rem;
+    z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 1px 4px rgb(0 0 0 / 45%);
+    pointer-events: none;
+  }
+
+  .sn-sec-before-after__controls {
+    position: absolute;
+    inset-inline: 0.75rem;
+    bottom: 0.75rem;
+    z-index: 4;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.5rem;
+    align-items: end;
+    padding: 0.65rem;
+    border-radius: var(--sn-radius-md, 0.5rem);
+    background: rgb(255 255 255 / 94%);
+  }
+
+  @media (max-width: 40rem) {
+    .sn-sec-before-after__controls {
+      grid-template-columns: 1fr;
+    }
+
+    .sn-sec-before-after__toggle {
+      width: 100%;
+    }
+  }
+
+  .sn-sec-before-after__toggle {
+    min-height: 2.75rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--sn-color-border, #d9e2ec);
+    border-radius: var(--sn-radius-sm, 0.25rem);
+    background: #fff;
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .sn-sec-before-after__slider-wrap {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .sn-sec-before-after__control-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .sn-sec__slider {
+    width: 100%;
+    min-height: 2.75rem;
   }
 
   .sn-sec-before-after__compare--reduced-motion {
@@ -128,6 +226,7 @@ const { heading, intro, comparisons, class: className = '' } = Astro.props;
     aspect-ratio: auto;
     overflow: visible;
     background: transparent;
+    box-shadow: none;
   }
 
   .sn-sec-before-after__compare--reduced-motion .sn-sec-before-after__image--before,
@@ -136,34 +235,8 @@ const { heading, intro, comparisons, class: className = '' } = Astro.props;
     clip-path: none;
   }
 
-  .sn-sec-before-after__compare--reduced-motion .sn-sec-before-after__control {
+  .sn-sec-before-after__compare--reduced-motion .sn-sec-before-after__controls,
+  .sn-sec-before-after__compare--reduced-motion .sn-sec-before-after__labels {
     display: none;
-  }
-
-  .sn-sec-before-after__control {
-    position: absolute;
-    inset-inline: var(--sn-space-sm, 0.75rem);
-    bottom: var(--sn-space-sm, 0.75rem);
-    z-index: 2;
-    display: grid;
-    gap: 0.35rem;
-    padding: 0.5rem 0.75rem;
-    border-radius: var(--sn-radius-sm, 0.25rem);
-    background: rgb(255 255 255 / 92%);
-  }
-
-  .sn-sec-before-after__control-label {
-    font-size: 0.85rem;
-    font-weight: 600;
-  }
-
-  .sn-sec__slider {
-    width: 100%;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .sn-sec-before-after__compare:not(.sn-sec-before-after__compare--reduced-motion) .sn-sec-before-after__control {
-      display: none;
-    }
   }
 </style>

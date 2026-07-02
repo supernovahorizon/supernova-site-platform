@@ -12,6 +12,18 @@ export {
 export { evergreenGroveFixture, blueRidgeFixture } from './fixtures/index.js';
 export { landscapingDemoContent, type LandscapingService } from './demo-content.js';
 export {
+  ThemeConfigSchema,
+  evergreenGroveTheme,
+  blueRidgeTheme,
+  evergreenGroveTokens,
+  blueRidgeTokens,
+  getThemeTokens,
+  themeTokensToCss,
+  getGoogleFontsUrl,
+  type ThemeConfig,
+  type ThemeTokens,
+} from './theme.js';
+export {
   assertVerticalExists,
   getSupportedVerticalIds,
   isSupportedVertical,

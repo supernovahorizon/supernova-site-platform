@@ -2,6 +2,7 @@
 import Container from '@supernova/ui-primitives/Container.astro';
 import Section from '@supernova/ui-primitives/Section.astro';
 import Heading from '@supernova/ui-primitives/Heading.astro';
+import ResponsiveImage from './ResponsiveImage.astro';
 import type { ServiceCardsSectionProps } from './component-props';
 import { resolveServiceHref } from './props';
 
@@ -12,28 +13,49 @@ const {
   intro,
   services,
   serviceBasePath = '/services',
+  variant = 'organic',
   class: className = '',
 } = Astro.props;
 ---
 
-<Section class={`sn-sec-services ${className}`.trim()} ariaLabel={heading}>
+<Section class={`sn-sec-services sn-sec-services--${variant} ${className}`.trim()} ariaLabel={heading}>
   <Container>
-    <Heading level={2}>{heading}</Heading>
-    {intro ? <p class="sn-sec__intro">{intro}</p> : null}
+    <div class="sn-sec-services__header">
+      <Heading level={2}>{heading}</Heading>
+      {intro ? <p class="sn-sec__intro">{intro}</p> : null}
+    </div>
 
-    <div class="sn-sec__grid sn-sec__grid--cards">
+    <div class="sn-sec-services__grid">
       {
         services.map((service) => {
           const href = resolveServiceHref(service, serviceBasePath);
 
           return (
-            <article class="sn-sec__card">
-              <Heading level={3}>
-                <a class="sn-sec__card-link" href={href}>
-                  {service.name}
+            <article class="sn-sec-services__card">
+              {
+                service.heroImage ? (
+                  <a class="sn-sec-services__media" href={href} tabindex="-1" aria-hidden="true">
+                    <ResponsiveImage
+                      src={service.heroImage.src}
+                      alt={service.heroImage.alt}
+                      width={640}
+                      height={480}
+                      sizes="(min-width: 48rem) 33vw, 100vw"
+                    />
+                  </a>
+                ) : null
+              }
+              <div class="sn-sec-services__body">
+                <Heading level={3}>
+                  <a class="sn-sec__card-link" href={href}>
+                    {service.name}
+                  </a>
+                </Heading>
+                <p>{service.summary}</p>
+                <a class="sn-sec-services__more" href={href}>
+                  Learn more
                 </a>
-              </Heading>
-              <p>{service.summary}</p>
+              </div>
             </article>
           );
         })
@@ -41,3 +63,88 @@ const {
     </div>
   </Container>
 </Section>
+
+<style>
+  .sn-sec-services__header {
+    margin-bottom: var(--sn-space-lg, 1.5rem);
+  }
+
+  .sn-sec-services__grid {
+    display: grid;
+    gap: var(--sn-space-md, 1rem);
+  }
+
+  @media (min-width: 40rem) {
+    .sn-sec-services--organic .sn-sec-services__grid {
+      grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    }
+
+    .sn-sec-services--geometric .sn-sec-services__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .sn-sec-services__card {
+    display: grid;
+    background: var(--sn-color-surface, #fff);
+    border: 1px solid var(--sn-color-border, #d9e2ec);
+    overflow: hidden;
+    box-shadow: var(--sn-shadow-sm, none);
+  }
+
+  .sn-sec-services--organic .sn-sec-services__card {
+    border-radius: var(--sn-radius-xl, 1.75rem);
+  }
+
+  .sn-sec-services--geometric .sn-sec-services__card {
+    border-radius: var(--sn-radius-md, 0.5rem);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 48rem) {
+    .sn-sec-services--geometric .sn-sec-services__card {
+      grid-template-columns: 0.9fr 1.1fr;
+    }
+  }
+
+  .sn-sec-services__media {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+  }
+
+  .sn-sec-services__media :global(img) {
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .sn-sec-services__card:hover .sn-sec-services__media :global(img) {
+      transform: scale(1.03);
+    }
+  }
+
+  .sn-sec-services__body {
+    padding: var(--sn-space-md, 1rem) var(--sn-space-lg, 1.5rem) var(--sn-space-lg, 1.5rem);
+  }
+
+  .sn-sec-services__body p {
+    margin: 0.5rem 0 0;
+    color: var(--sn-color-text-muted, inherit);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .sn-sec-services__more {
+    display: inline-flex;
+    margin-top: 0.85rem;
+    font-weight: 600;
+    color: var(--sn-color-accent, #2f6f4e);
+    text-decoration: none;
+  }
+
+  .sn-sec-services__more:hover {
+    text-decoration: underline;
+  }
+</style>

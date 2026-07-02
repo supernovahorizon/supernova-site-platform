@@ -2,7 +2,7 @@
 import Container from '@supernova/ui-primitives/Container.astro';
 import Section from '@supernova/ui-primitives/Section.astro';
 import Heading from '@supernova/ui-primitives/Heading.astro';
-import ButtonLink from '@supernova/ui-primitives/ButtonLink.astro';
+import ResponsiveImage from './ResponsiveImage.astro';
 import type { HeroSectionProps } from './component-props';
 
 interface Props extends HeroSectionProps {}
@@ -11,26 +11,90 @@ const {
   headline,
   subheadline,
   intro,
+  eyebrow,
   image,
   cta,
+  secondaryCta,
+  variant = 'editorial',
+  metrics = [],
   class: className = '',
 } = Astro.props;
 ---
 
-<Section class={`sn-sec-hero ${className}`.trim()} ariaLabel="Hero">
+<Section class={`sn-sec-hero sn-sec-hero--${variant} ${className}`.trim()} ariaLabel="Hero">
+  {
+    variant === 'cinematic' && image ? (
+      <div class="sn-sec-hero__backdrop" aria-hidden="true">
+        <ResponsiveImage
+          src={image.src}
+          alt=""
+          width={1920}
+          height={1080}
+          loading="eager"
+          fetchpriority="high"
+          sizes="100vw"
+        />
+        <div class="sn-sec-hero__overlay" />
+      </div>
+    ) : null
+  }
+
   <Container>
-    <div class={`sn-sec-hero__layout${image ? ' sn-sec-hero__layout--with-image' : ''}`}>
+    <div class={`sn-sec-hero__layout sn-sec-hero__layout--${variant}`}>
       <div class="sn-sec-hero__content">
+        {eyebrow ? <p class="sn-sec-hero__eyebrow">{eyebrow}</p> : null}
         <Heading level={1}>{headline}</Heading>
         <p class="sn-sec-hero__subheadline">{subheadline}</p>
         {intro ? <p class="sn-sec-hero__intro">{intro}</p> : null}
-        {cta ? <ButtonLink href={cta.href}>{cta.label}</ButtonLink> : null}
+
+        <div class="sn-sec-hero__actions">
+          {
+            cta ? (
+              <a class="sn-btn sn-btn--primary" href={cta.href}>
+                {cta.label}
+              </a>
+            ) : null
+          }
+          {
+            secondaryCta ? (
+              <a class="sn-btn sn-btn--secondary" href={secondaryCta.href}>
+                {secondaryCta.label}
+              </a>
+            ) : null
+          }
+        </div>
+
+        {
+          metrics.length > 0 ? (
+            <div class="sn-sec-hero__metrics-wrap">
+              <p class="sn-sec-hero__metrics-note" role="note">Sample portfolio metrics</p>
+              <ul class="sn-sec-hero__metrics" role="list">
+                {
+                  metrics.map((metric) => (
+                    <li>
+                      <span class="sn-sec-hero__metric-value">{metric.value}</span>
+                      <span class="sn-sec-hero__metric-label">{metric.label}</span>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+          ) : null
+        }
       </div>
 
       {
-        image ? (
+        variant === 'editorial' && image ? (
           <figure class="sn-sec-hero__figure">
-            <img src={image.src} alt={image.alt} loading="eager" />
+            <ResponsiveImage
+              src={image.src}
+              alt={image.alt}
+              width={1200}
+              height={900}
+              loading="eager"
+              fetchpriority="high"
+              sizes="(min-width: 48rem) 50vw, 100vw"
+            />
           </figure>
         ) : null
       }
@@ -39,43 +103,156 @@ const {
 </Section>
 
 <style>
-  .sn-sec-hero__layout {
-    display: grid;
-    gap: var(--sn-space-lg, 1.5rem);
-    background: var(--sn-color-surface, #ffffff);
-    border: 1px solid var(--sn-color-border, #d9e2ec);
-    border-radius: var(--sn-radius-lg, 1rem);
-    padding: var(--sn-space-xl, 2.5rem);
+  .sn-sec-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(2.5rem, 6vw, 5rem);
   }
 
-  .sn-sec-hero__layout--with-image {
+  .sn-sec-hero--cinematic {
+    color: #fff;
+    min-height: min(88vh, 52rem);
+    display: flex;
     align-items: center;
   }
 
+  .sn-sec-hero__backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .sn-sec-hero__backdrop picture,
+  .sn-sec-hero__backdrop img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .sn-sec-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--sn-color-overlay, rgb(0 0 0 / 55%));
+  }
+
+  .sn-sec-hero--cinematic .sn-sec-hero__layout {
+    position: relative;
+    z-index: 1;
+  }
+
+  .sn-sec-hero__layout {
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: center;
+  }
+
+  .sn-sec-hero__layout--editorial {
+    background: var(--sn-color-surface, #fff);
+    border: 1px solid var(--sn-color-border, #d9e2ec);
+    border-radius: var(--sn-radius-xl, 1.75rem);
+    padding: clamp(1.5rem, 4vw, 3rem);
+    box-shadow: var(--sn-shadow-md, none);
+  }
+
   @media (min-width: 48rem) {
-    .sn-sec-hero__layout--with-image {
-      grid-template-columns: 1.1fr 0.9fr;
+    .sn-sec-hero__layout--editorial {
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+
+    .sn-sec-hero__layout--cinematic {
+      max-width: 42rem;
     }
   }
 
+  .sn-sec-hero__eyebrow {
+    margin: 0 0 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sn-color-accent, #2f6f4e);
+  }
+
+  .sn-sec-hero--cinematic .sn-sec-hero__eyebrow {
+    color: color-mix(in srgb, #fff 85%, var(--sn-color-accent, #5ba4d9));
+  }
+
   .sn-sec-hero__subheadline {
-    font-size: 1.125rem;
-    margin: 0 0 var(--sn-space-md, 1rem);
+    font-family: var(--sn-font-display, inherit);
+    font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+    line-height: 1.35;
+    margin: 0.75rem 0 0;
+    color: var(--sn-color-text-muted, inherit);
+  }
+
+  .sn-sec-hero--cinematic .sn-sec-hero__subheadline {
+    color: rgb(255 255 255 / 88%);
   }
 
   .sn-sec-hero__intro {
-    margin: 0 0 var(--sn-space-lg, 1.5rem);
-    max-width: 65ch;
+    margin: 1rem 0 0;
+    max-width: 52ch;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: var(--sn-color-text-muted, inherit);
+  }
+
+  .sn-sec-hero--cinematic .sn-sec-hero__intro {
+    color: rgb(255 255 255 / 78%);
+  }
+
+  .sn-sec-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
   }
 
   .sn-sec-hero__figure {
     margin: 0;
+    border-radius: var(--sn-radius-xl, 1.75rem);
+    overflow: hidden;
   }
 
-  .sn-sec-hero__figure img {
-    display: block;
-    width: 100%;
-    height: auto;
+  .sn-sec-hero__figure :global(img) {
+    border-radius: var(--sn-radius-xl, 1.75rem);
+  }
+
+  .sn-sec-hero__metrics-note {
+    margin: 0 0 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 65%);
+  }
+
+  .sn-sec-hero__metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+    list-style: none;
+    margin: 1.75rem 0 0;
+    padding: 0;
+  }
+
+  .sn-sec-hero__metrics li {
+    display: grid;
+    gap: 0.15rem;
+    min-width: 6rem;
+    padding: 0.75rem 1rem;
     border-radius: var(--sn-radius-md, 0.5rem);
+    background: rgb(255 255 255 / 10%);
+    border: 1px solid rgb(255 255 255 / 18%);
+  }
+
+  .sn-sec-hero__metric-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .sn-sec-hero__metric-label {
+    font-size: 0.8125rem;
+    color: rgb(255 255 255 / 72%);
   }
 </style>

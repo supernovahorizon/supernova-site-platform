@@ -1,0 +1,109 @@
+---
+import Container from '@supernova/ui-primitives/Container.astro';
+import Section from '@supernova/ui-primitives/Section.astro';
+import Heading from '@supernova/ui-primitives/Heading.astro';
+
+interface ProcessStep {
+  title: string;
+  description: string;
+}
+
+interface Props {
+  heading?: string;
+  intro?: string;
+  steps: ProcessStep[];
+  variant?: 'editorial' | 'cinematic';
+  class?: string;
+}
+
+const {
+  heading = 'How it works',
+  intro,
+  steps,
+  variant = 'editorial',
+  class: className = '',
+} = Astro.props;
+---
+
+<Section class={`sn-sec-process sn-sec-process--${variant} ${className}`.trim()} ariaLabel={heading}>
+  <Container>
+    <div class="sn-sec-process__header">
+      <Heading level={2}>{heading}</Heading>
+      {intro ? <p class="sn-sec__intro">{intro}</p> : null}
+    </div>
+
+    <ol class="sn-sec-process__steps">
+      {
+        steps.map((step, index) => (
+          <li class="sn-sec-process__step">
+            <span class="sn-sec-process__number" aria-hidden="true">
+              {index + 1}
+            </span>
+            <div>
+              <Heading level={3}>{step.title}</Heading>
+              <p>{step.description}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </Container>
+</Section>
+
+<style>
+  .sn-sec-process__header {
+    margin-bottom: var(--sn-space-lg, 1.5rem);
+  }
+
+  .sn-sec-process__steps {
+    display: grid;
+    gap: var(--sn-space-md, 1rem);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: process;
+  }
+
+  @media (min-width: 48rem) {
+    .sn-sec-process--editorial .sn-sec-process__steps {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .sn-sec-process--cinematic .sn-sec-process__steps {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .sn-sec-process__step {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--sn-space-md, 1rem);
+    padding: var(--sn-space-md, 1rem);
+    background: var(--sn-color-surface, #fff);
+    border: 1px solid var(--sn-color-border, #d9e2ec);
+    border-radius: var(--sn-radius-lg, 1rem);
+    box-shadow: var(--sn-shadow-sm, none);
+  }
+
+  .sn-sec-process--cinematic .sn-sec-process__step {
+    background: var(--sn-color-surface-elevated, #242d36);
+  }
+
+  .sn-sec-process__number {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--sn-radius-pill, 999px);
+    background: color-mix(in srgb, var(--sn-color-accent, #2f6f4e) 18%, transparent);
+    color: var(--sn-color-accent, #2f6f4e);
+    font-weight: 700;
+    font-size: 0.9375rem;
+  }
+
+  .sn-sec-process__step p {
+    margin: 0.35rem 0 0;
+    color: var(--sn-color-text-muted, inherit);
+    font-size: 0.9375rem;
+  }
+</style>

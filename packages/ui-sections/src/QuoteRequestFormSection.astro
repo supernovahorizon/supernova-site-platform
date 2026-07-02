@@ -17,7 +17,7 @@ const {
   services,
   budgetRanges = [],
   formAction = '#quote',
-  staticSubmissionNote = 'Static demo sites can post to /api/quote when an adapter is wired. This form validates client-side and uses the configured action.',
+  staticSubmissionNote = 'This demo validates your request locally. No data is transmitted unless an adapter is configured.',
   preferredContactMethods = ['email', 'phone', 'either'],
   class: className = '',
 } = Astro.props;
@@ -25,181 +25,420 @@ const {
 const fieldNames = getQuoteRequestInputNames();
 const formId = 'sn-quote-request-form';
 const statusId = 'sn-quote-request-status';
+const errorSummaryId = 'sn-quote-error-summary';
+const steps = ['Project details', 'Scope & budget', 'Contact info'];
 ---
 
 <Section class={`sn-sec-quote ${className}`.trim()} ariaLabel={heading} id="quote">
   <Container>
-    <Heading level={2}>{heading}</Heading>
-    {intro ? <p class="sn-sec__intro">{intro}</p> : null}
-    <p class="sn-sec__muted">{staticSubmissionNote}</p>
+    <div class="sn-sec-quote__shell">
+      <div class="sn-sec-quote__intro-block">
+        <Heading level={2}>{heading}</Heading>
+        {intro ? <p class="sn-sec__intro">{intro}</p> : null}
+      </div>
 
-    <form
-      id={formId}
-      class="sn-sec__form sn-sec-quote__form"
-      action={formAction}
-      method="post"
-      novalidate
+      <div class="sn-sec-quote__progress" aria-label="Form progress" role="group">
+        {
+          steps.map((label, index) => (
+            <div
+              class="sn-sec-quote__progress-step"
+              data-step-indicator={index + 1}
+              aria-current={index === 0 ? 'step' : undefined}
+            >
+              <span class="sn-sec-quote__progress-number">{index + 1}</span>
+              <span class="sn-sec-quote__progress-label">{label}</span>
+            </div>
+          ))
+        }
+      </div>
+
+      <form
+        id={formId}
+        class="sn-sec__form sn-sec-quote__form"
+        action={formAction}
+        method="post"
+        novalidate
       data-quote-form
       data-success-message={successMessage}
+      data-current-step="1"
+      data-quote-field-names={JSON.stringify(fieldNames)}
     >
-      <div class="sn-sec-quote__field">
-        <label for="quote-name">Full name</label>
-        <input id="quote-name" name="name" type="text" required minlength="1" maxlength="120" autocomplete="name" />
-      </div>
+        <div id={errorSummaryId} class="sn-sec-quote__errors" role="alert" aria-live="assertive" hidden />
 
-      <div class="sn-sec-quote__field">
-        <label for="quote-email">Email</label>
-        <input id="quote-email" name="email" type="email" required autocomplete="email" />
-      </div>
+        <fieldset class="sn-sec-quote__step" data-quote-step="1">
+          <legend class="sn-sec-quote__legend">Step 1: Project details</legend>
 
-      <div class="sn-sec-quote__field">
-        <label for="quote-phone">Phone</label>
-        <input
-          id="quote-phone"
-          name="phone"
-          type="tel"
-          required
-          minlength="7"
-          maxlength="30"
-          autocomplete="tel"
-        />
-      </div>
-
-      <div class="sn-sec-quote__field">
-        <label for="quote-service">Requested service</label>
-        <select id="quote-service" name="requestedService" required>
-          <option value="">Select a service</option>
-          {services.map((service) => <option value={service}>{service}</option>)}
-        </select>
-      </div>
-
-      <div class="sn-sec-quote__field">
-        <label for="quote-address">Service address or ZIP</label>
-        <input
-          id="quote-address"
-          name="serviceAddressOrZip"
-          type="text"
-          required
-          minlength="3"
-          maxlength="160"
-          autocomplete="street-address"
-        />
-      </div>
-
-      <div class="sn-sec-quote__field">
-        <label for="quote-contact-method">Preferred contact method</label>
-        <select id="quote-contact-method" name="preferredContactMethod" required>
-          {
-            preferredContactMethods.map((method) => (
-              <option value={method}>
-                {method === 'either' ? 'Email or phone' : method.charAt(0).toUpperCase() + method.slice(1)}
-              </option>
-            ))
-          }
-        </select>
-      </div>
-
-      <div class="sn-sec-quote__field">
-        <label for="quote-description">Project description</label>
-        <textarea
-          id="quote-description"
-          name="projectDescription"
-          required
-          minlength="20"
-          maxlength="2000"
-          rows="5"
-        />
-      </div>
-
-      {
-        budgetRanges.length > 0 ? (
           <div class="sn-sec-quote__field">
-            <label for="quote-budget">Budget range (optional)</label>
-            <select id="quote-budget" name="budgetRange">
-              <option value="">Prefer not to say</option>
-              {budgetRanges.map((range) => <option value={range}>{range}</option>)}
+            <label for="quote-service">Requested service</label>
+            <select id="quote-service" name="requestedService" required>
+              <option value="">Select a service</option>
+              {services.map((service) => <option value={service}>{service}</option>)}
+            </select>
+            <span class="sn-sec-quote__hint">Choose the service that best matches your project.</span>
+          </div>
+
+          <div class="sn-sec-quote__field">
+            <label for="quote-address">Project location</label>
+            <input
+              id="quote-address"
+              name="serviceAddressOrZip"
+              type="text"
+              required
+              minlength="3"
+              maxlength="160"
+              autocomplete="street-address"
+              placeholder="Street address or ZIP code"
+            />
+            <span class="sn-sec-quote__hint">We use this to plan routes and site access.</span>
+          </div>
+        </fieldset>
+
+        <fieldset class="sn-sec-quote__step" data-quote-step="2" hidden>
+          <legend class="sn-sec-quote__legend">Step 2: Scope and budget</legend>
+
+          <div class="sn-sec-quote__field">
+            <label for="quote-description">Project description</label>
+            <textarea
+              id="quote-description"
+              name="projectDescription"
+              required
+              minlength="20"
+              maxlength="2000"
+              rows="5"
+              placeholder="Tell us about goals, timing, and any site constraints"
+            />
+          </div>
+
+          <div class="sn-sec-quote__field">
+            <label for="quote-timeline">Preferred timeline (optional)</label>
+            <input
+              id="quote-timeline"
+              name="projectTimeline"
+              type="text"
+              maxlength="80"
+              autocomplete="off"
+              placeholder="e.g. Start this spring"
+            />
+          </div>
+
+          {
+            budgetRanges.length > 0 ? (
+              <div class="sn-sec-quote__field">
+                <label for="quote-budget">Budget range (optional)</label>
+                <select id="quote-budget" name="budgetRange">
+                  <option value="">Prefer not to say</option>
+                  {budgetRanges.map((range) => <option value={range}>{range}</option>)}
+                </select>
+              </div>
+            ) : (
+              <input type="hidden" name="budgetRange" value="" />
+            )
+          }
+        </fieldset>
+
+        <fieldset class="sn-sec-quote__step" data-quote-step="3" hidden>
+          <legend class="sn-sec-quote__legend">Step 3: Contact information</legend>
+
+          <div class="sn-sec-quote__field">
+            <label for="quote-name">Full name</label>
+            <input
+              id="quote-name"
+              name="name"
+              type="text"
+              required
+              minlength="1"
+              maxlength="120"
+              autocomplete="name"
+            />
+          </div>
+
+          <div class="sn-sec-quote__field">
+            <label for="quote-email">Email</label>
+            <input id="quote-email" name="email" type="email" required autocomplete="email" inputmode="email" />
+          </div>
+
+          <div class="sn-sec-quote__field">
+            <label for="quote-phone">Phone</label>
+            <input
+              id="quote-phone"
+              name="phone"
+              type="tel"
+              required
+              minlength="7"
+              maxlength="30"
+              autocomplete="tel"
+              inputmode="tel"
+            />
+          </div>
+
+          <div class="sn-sec-quote__field">
+            <label for="quote-contact-method">Preferred contact method</label>
+            <select id="quote-contact-method" name="preferredContactMethod" required>
+              {
+                preferredContactMethods.map((method) => (
+                  <option value={method}>
+                    {method === 'either' ? 'Email or phone' : method.charAt(0).toUpperCase() + method.slice(1)}
+                  </option>
+                ))
+              }
             </select>
           </div>
-        ) : (
-          <input type="hidden" name="budgetRange" value="" />
-        )
-      }
 
-      <div class="sn-sec-quote__field sn-sec-quote__field--checkbox">
-        <input id="quote-consent" name="consentAcknowledgment" type="checkbox" value="true" required />
-        <label for="quote-consent">
-          I agree to be contacted about this request and have read the{' '}
-          <a href={privacyPolicyHref}>{privacyPolicyLabel}</a>.
-        </label>
-      </div>
+          <div class="sn-sec-quote__field sn-sec-quote__field--checkbox">
+            <input id="quote-consent" name="consentAcknowledgment" type="checkbox" value="true" required />
+            <label for="quote-consent">
+              I agree to be contacted about this request and have read the{' '}
+              <a href={privacyPolicyHref}>{privacyPolicyLabel}</a>.
+            </label>
+          </div>
+        </fieldset>
 
-      <div class="sn-sec-quote__honeypot" aria-hidden="true">
-        <label for="quote-honeypot">Leave blank</label>
-        <input id="quote-honeypot" name="honeypot" type="text" tabindex="-1" autocomplete="off" />
-      </div>
+        <div class="sn-sec-quote__honeypot" aria-hidden="true">
+          <label for="quote-honeypot">Leave blank</label>
+          <input id="quote-honeypot" name="honeypot" type="text" tabindex="-1" autocomplete="off" />
+        </div>
 
-      <button class="sn-sec__button" type="submit">{submitLabel}</button>
-      <p id={statusId} class="sn-sec-quote__status" role="status" aria-live="polite" />
-    </form>
+        <div class="sn-sec-quote__actions">
+          <button class="sn-sec__button sn-sec-quote__back" type="button" data-quote-back hidden>
+            Back
+          </button>
+          <button class="sn-sec__button sn-sec-quote__next" type="button" data-quote-next>
+            Continue
+          </button>
+          <button class="sn-sec__button sn-sec-quote__submit" type="submit" hidden>
+            {submitLabel}
+          </button>
+        </div>
 
-    <template data-quote-field-names={JSON.stringify(fieldNames)} />
+        <p class="sn-sec__muted sn-sec-quote__note">{staticSubmissionNote}</p>
+        <p id={statusId} class="sn-sec-quote__status" role="status" aria-live="polite" />
+        <button class="sn-sec-quote__reset" type="button" data-quote-reset hidden>
+          Start a new request
+        </button>
+      </form>
+    </div>
+
   </Container>
 </Section>
 
-<script>
-  import { QuoteRequestSchema } from '@supernova/forms';
+<script is:inline>
+  (function () {
+    const form = document.querySelector('[data-quote-form]');
+    if (!(form instanceof HTMLFormElement)) return;
 
-  const form = document.querySelector('[data-quote-form]');
+    const status = document.getElementById('sn-quote-request-status');
+    const errorSummary = document.getElementById('sn-quote-error-summary');
+    const nextButton = form.querySelector('[data-quote-next]');
+    const backButton = form.querySelector('[data-quote-back]');
+    const submitButton = form.querySelector('.sn-sec-quote__submit');
+    const resetButton = form.querySelector('[data-quote-reset]');
+    const shell = form.closest('.sn-sec-quote__shell');
+    const stepIndicators = shell ? shell.querySelectorAll('[data-step-indicator]') : [];
+    const steps = Array.from(form.querySelectorAll('[data-quote-step]'));
 
-  if (form instanceof HTMLFormElement) {
-    const status = form.querySelector('#sn-quote-request-status');
+    const getCurrentStep = () => Number(form.dataset.currentStep || '1');
 
-    form.addEventListener('submit', (event) => {
+    const setCurrentStep = (step) => {
+      form.dataset.currentStep = String(step);
+      steps.forEach((fieldset) => {
+        const stepNum = Number(fieldset.getAttribute('data-quote-step'));
+        fieldset.hidden = stepNum !== step;
+      });
+      stepIndicators.forEach((indicator) => {
+        const stepNum = Number(indicator.getAttribute('data-step-indicator'));
+        indicator.setAttribute('aria-current', stepNum === step ? 'step' : 'false');
+      });
+      if (backButton instanceof HTMLButtonElement) backButton.hidden = step <= 1;
+      if (nextButton instanceof HTMLButtonElement) nextButton.hidden = step >= 3;
+      if (submitButton instanceof HTMLButtonElement) submitButton.hidden = step !== 3;
+    };
+
+    const showErrors = (messages) => {
+      if (!(errorSummary instanceof HTMLElement)) return;
+      if (!messages.length) {
+        errorSummary.hidden = true;
+        errorSummary.textContent = '';
+        return;
+      }
+      errorSummary.hidden = false;
+      errorSummary.innerHTML =
+        '<strong>Please fix the following:</strong><ul>' +
+        messages.map((m) => '<li>' + m + '</li>').join('') +
+        '</ul>';
+    };
+
+    const validateStep = (step) => {
+      const messages = [];
+      if (step === 1) {
+        const service = form.querySelector('#quote-service');
+        const address = form.querySelector('#quote-address');
+        if (!(service instanceof HTMLSelectElement) || !service.value) messages.push('Requested service');
+        if (!(address instanceof HTMLInputElement) || address.value.trim().length < 3) {
+          messages.push('Project location');
+        }
+      } else if (step === 2) {
+        const description = form.querySelector('#quote-description');
+        if (!(description instanceof HTMLTextAreaElement) || description.value.trim().length < 20) {
+          messages.push('Project description');
+        }
+      } else if (step === 3) {
+        const name = form.querySelector('#quote-name');
+        const email = form.querySelector('#quote-email');
+        const phone = form.querySelector('#quote-phone');
+        const consent = form.querySelector('#quote-consent');
+        if (!(name instanceof HTMLInputElement) || !name.value.trim()) messages.push('Full name');
+        if (!(email instanceof HTMLInputElement) || !email.value.includes('@')) messages.push('Email');
+        if (!(phone instanceof HTMLInputElement) || phone.value.trim().length < 7) messages.push('Phone');
+        if (!(consent instanceof HTMLInputElement) || !consent.checked) messages.push('Consent');
+      }
+      showErrors(messages);
+      return messages.length === 0;
+    };
+
+    if (nextButton) {
+      nextButton.addEventListener('click', function () {
+        const step = getCurrentStep();
+        if (!validateStep(step)) return;
+        showErrors([]);
+        setCurrentStep(Math.min(step + 1, 3));
+      });
+    }
+
+    if (backButton) {
+      backButton.addEventListener('click', function () {
+        setCurrentStep(Math.max(getCurrentStep() - 1, 1));
+        showErrors([]);
+      });
+    }
+
+    if (resetButton) {
+      resetButton.addEventListener('click', function () {
+        form.reset();
+        setCurrentStep(1);
+        showErrors([]);
+        if (status) status.textContent = '';
+        resetButton.hidden = true;
+        form.querySelectorAll('fieldset').forEach((fs) => {
+          fs.disabled = false;
+        });
+      });
+    }
+
+    form.addEventListener('submit', function (event) {
       event.preventDefault();
+      if (!validateStep(3)) return;
 
       const formData = new FormData(form);
       const consent = formData.get('consentAcknowledgment');
       const payload = {
-        name: String(formData.get('name') ?? ''),
-        email: String(formData.get('email') ?? ''),
-        phone: String(formData.get('phone') ?? ''),
-        requestedService: String(formData.get('requestedService') ?? ''),
-        serviceAddressOrZip: String(formData.get('serviceAddressOrZip') ?? ''),
-        preferredContactMethod: String(formData.get('preferredContactMethod') ?? ''),
-        projectDescription: String(formData.get('projectDescription') ?? ''),
-        budgetRange: String(formData.get('budgetRange') ?? '') || undefined,
-        consentAcknowledgment: consent === 'true' ? true : false,
-        honeypot: String(formData.get('honeypot') ?? ''),
+        name: String(formData.get('name') || ''),
+        email: String(formData.get('email') || ''),
+        phone: String(formData.get('phone') || ''),
+        requestedService: String(formData.get('requestedService') || ''),
+        serviceAddressOrZip: String(formData.get('serviceAddressOrZip') || ''),
+        preferredContactMethod: String(formData.get('preferredContactMethod') || ''),
+        projectDescription: String(formData.get('projectDescription') || ''),
+        budgetRange: String(formData.get('budgetRange') || '') || undefined,
+        consentAcknowledgment: consent === 'true',
+        honeypot: String(formData.get('honeypot') || ''),
       };
 
-      const parsed = QuoteRequestSchema.safeParse(payload);
+      const errors = [];
+      if (!payload.name) errors.push('Name is required.');
+      if (!payload.email || !payload.email.includes('@')) errors.push('Valid email is required.');
+      if (!payload.phone || payload.phone.length < 7) errors.push('Phone is required.');
+      if (!payload.requestedService) errors.push('Select a service.');
+      if (!payload.serviceAddressOrZip || payload.serviceAddressOrZip.length < 3) {
+        errors.push('Project location is required.');
+      }
+      if (!payload.projectDescription || payload.projectDescription.length < 20) {
+        errors.push('Project description must be at least 20 characters.');
+      }
+      if (!payload.consentAcknowledgment) errors.push('Consent is required.');
+      if (payload.honeypot) errors.push('Submission blocked.');
 
-      if (!parsed.success) {
-        const message = parsed.error.issues.map((issue) => issue.message).join(' ');
-        if (status instanceof HTMLElement) {
-          status.textContent = message;
-        }
+      if (errors.length) {
+        showErrors(errors);
         return;
       }
 
-      const successMessage = form.dataset.successMessage ?? 'Thanks — your request was validated.';
-      if (status instanceof HTMLElement) {
-        status.textContent = successMessage;
-      }
+      showErrors([]);
+      const successMessage = form.dataset.successMessage || 'Thanks — your request was validated.';
+      if (status) status.textContent = successMessage;
+      form.querySelectorAll('fieldset').forEach((fs) => {
+        fs.disabled = true;
+      });
+      if (resetButton) resetButton.hidden = false;
 
       if (form.action && !form.action.endsWith('#quote')) {
         form.submit();
       }
     });
-  }
+
+    setCurrentStep(1);
+  })();
 </script>
 
 <style>
+  .sn-sec-quote__shell {
+    max-width: 40rem;
+    margin-inline: auto;
+    padding: clamp(1.25rem, 4vw, 2rem);
+    background: var(--sn-color-surface, #fff);
+    border: 1px solid var(--sn-color-border, #d9e2ec);
+    border-radius: var(--sn-radius-xl, 1.75rem);
+    box-shadow: var(--sn-shadow-md, none);
+  }
+
+  .sn-sec-quote__progress {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .sn-sec-quote__progress-step {
+    display: grid;
+    gap: 0.25rem;
+    text-align: center;
+    font-size: 0.8125rem;
+    color: var(--sn-color-text-muted, inherit);
+  }
+
+  .sn-sec-quote__progress-step[aria-current='step'] {
+    color: var(--sn-color-accent, #2f6f4e);
+    font-weight: 700;
+  }
+
+  .sn-sec-quote__progress-number {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    margin-inline: auto;
+    border-radius: var(--sn-radius-pill, 999px);
+    border: 2px solid currentColor;
+    font-weight: 700;
+  }
+
   .sn-sec-quote__form {
     display: grid;
     gap: var(--sn-space-md, 1rem);
-    max-width: 40rem;
-    margin-top: var(--sn-space-md, 1rem);
+  }
+
+  .sn-sec-quote__step {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--sn-space-md, 1rem);
+  }
+
+  .sn-sec-quote__legend {
+    font-weight: 700;
+    font-size: 1.0625rem;
+    margin-bottom: 0.25rem;
+    padding: 0;
   }
 
   .sn-sec-quote__field {
@@ -210,7 +449,7 @@ const statusId = 'sn-quote-request-status';
   .sn-sec-quote__field--checkbox {
     grid-template-columns: auto 1fr;
     align-items: start;
-    gap: 0.5rem;
+    gap: 0.65rem;
   }
 
   .sn-sec-quote__field label {
@@ -221,10 +460,44 @@ const statusId = 'sn-quote-request-status';
   .sn-sec-quote__field select,
   .sn-sec-quote__field textarea {
     width: 100%;
-    padding: 0.65rem 0.75rem;
+    min-height: 2.75rem;
+    padding: 0.75rem 0.85rem;
     border: 1px solid var(--sn-color-border, #d9e2ec);
-    border-radius: var(--sn-radius-sm, 0.25rem);
+    border-radius: var(--sn-radius-md, 0.5rem);
     font: inherit;
+    font-size: 1rem;
+    background: var(--sn-color-background, #fff);
+    color: inherit;
+  }
+
+  .sn-sec-quote__field textarea {
+    min-height: 8rem;
+    resize: vertical;
+  }
+
+  .sn-sec-quote__hint {
+    font-size: 0.8125rem;
+    color: var(--sn-color-text-muted, inherit);
+  }
+
+  .sn-sec-quote__errors {
+    padding: 0.85rem 1rem;
+    border-radius: var(--sn-radius-md, 0.5rem);
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+    font-size: 0.9375rem;
+  }
+
+  .sn-sec-quote__errors ul {
+    margin: 0.35rem 0 0;
+    padding-left: 1.25rem;
+  }
+
+  .sn-sec-quote__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
   }
 
   .sn-sec-quote__honeypot {
@@ -235,26 +508,26 @@ const statusId = 'sn-quote-request-status';
     overflow: hidden;
   }
 
-  .sn-sec__button {
-    justify-self: start;
-    padding: 0.75rem 1.25rem;
-    border: 0;
-    border-radius: var(--sn-radius-md, 0.5rem);
-    background: var(--sn-color-accent, #2f6f4e);
-    color: var(--sn-color-accent-contrast, #ffffff);
-    font: inherit;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
   .sn-sec-quote__status {
     margin: 0;
     min-height: 1.25rem;
     font-weight: 600;
+    color: var(--sn-color-accent, #2f6f4e);
   }
 
-  .sn-sec-quote__field a:focus-visible {
-    outline: 3px solid var(--sn-color-accent, #2f6f4e);
-    outline-offset: 3px;
+  .sn-sec-quote__reset {
+    justify-self: start;
+    border: 0;
+    background: none;
+    color: var(--sn-color-accent, #2f6f4e);
+    font: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .sn-sec-quote__note {
+    margin: 0;
   }
 </style>

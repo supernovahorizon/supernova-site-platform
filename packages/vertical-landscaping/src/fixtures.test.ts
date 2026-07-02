@@ -16,7 +16,7 @@ describe('landscaping fixtures', () => {
   it('parses blue ridge content with distinct branding and services', () => {
     const site = parseLandscapingSite(blueRidgeFixture);
 
-    expect(site.business.displayName).toBe('Blue Ridge Terrain Works');
+    expect(site.business.displayName).toBe('Blue Ridge Outdoor Living');
     expect(site.branding.primaryColor).not.toBe(evergreenGroveFixture.branding.primaryColor);
     expect(site.services.some((service) => service.slug === 'erosion-control')).toBe(true);
   });

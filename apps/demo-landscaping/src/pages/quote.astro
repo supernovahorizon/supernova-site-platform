@@ -7,7 +7,7 @@ import { site } from '../site';
 
 <LandscapingLayout
   title="Request a quote"
-  description={`Demonstration quote form with client-side validation for the ${site.business.displayName} site.`}
+  description={`Request a free landscaping estimate from ${site.business.displayName}. Share your project details and we will follow up with next steps.`}
   path="/quote"
   breadcrumbs={[
     { label: 'Home', href: '/' },
@@ -15,8 +15,8 @@ import { site } from '../site';
   ]}
 >
   <QuoteRequestFormSection
-    heading="Request a demonstration quote"
-    intro="Submitting this form validates input locally and does not transmit data in the default demo."
+    heading="Request a free estimate"
+    intro="Tell us about your property and project goals. This sample form validates your request locally in the demo environment."
     submitLabel={site.leadForm.submitLabel}
     successMessage={site.leadForm.successMessage}
     privacyPolicyHref={site.leadForm.privacyPolicyHref}

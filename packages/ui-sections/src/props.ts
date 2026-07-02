@@ -123,7 +123,7 @@ export type QuoteRequestFormSectionProps = {
 export const DEFAULT_FICTIONAL_DEMONSTRATION_LABEL = 'Fictional demonstration testimonial';
 
 export const DEFAULT_DEMO_BANNER_MESSAGE =
-  'Demonstration business — fictional content for platform evaluation only.';
+  'Sample website for a fictional landscaping business — content is for demonstration only.';
 
 export const BUSINESS_HOUR_DAY_KEYS = [
   'monday',

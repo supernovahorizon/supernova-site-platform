@@ -1,0 +1,13 @@
+{
+  "name": "@supernova/landscaping-demos-e2e",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:evergreen": "SITE=evergreen playwright test",
+    "test:blue-ridge": "SITE=blue-ridge playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0"
+  }
+}

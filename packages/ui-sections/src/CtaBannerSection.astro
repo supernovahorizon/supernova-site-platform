@@ -2,35 +2,83 @@
 import Container from '@supernova/ui-primitives/Container.astro';
 import Section from '@supernova/ui-primitives/Section.astro';
 import Heading from '@supernova/ui-primitives/Heading.astro';
-import ButtonLink from '@supernova/ui-primitives/ButtonLink.astro';
 import type { CtaBannerSectionProps } from './component-props';
 
 interface Props extends CtaBannerSectionProps {}
 
-const { headline, body, buttonLabel, buttonHref, class: className = '' } = Astro.props;
+const {
+  headline,
+  body,
+  buttonLabel,
+  buttonHref,
+  secondaryButtonLabel,
+  secondaryButtonHref,
+  variant = 'warm',
+  class: className = '',
+} = Astro.props;
 ---
 
-<Section class={`sn-sec-cta ${className}`.trim()} ariaLabel="Call to action">
+<Section class={`sn-sec-cta sn-sec-cta--${variant} ${className}`.trim()} ariaLabel="Call to action">
   <Container>
     <div class="sn-sec-cta__panel">
       <Heading level={2}>{headline}</Heading>
       <p class="sn-sec-cta__body">{body}</p>
-      <ButtonLink href={buttonHref}>{buttonLabel}</ButtonLink>
+      <div class="sn-sec-cta__actions">
+        <a class="sn-btn sn-btn--primary" href={buttonHref}>{buttonLabel}</a>
+        {
+          secondaryButtonLabel && secondaryButtonHref ? (
+            <a class="sn-btn sn-btn--secondary" href={secondaryButtonHref}>
+              {secondaryButtonLabel}
+            </a>
+          ) : null
+        }
+      </div>
     </div>
   </Container>
 </Section>
 
 <style>
   .sn-sec-cta__panel {
-    background: color-mix(in srgb, var(--sn-color-accent, #2f6f4e) 12%, var(--sn-color-surface, #ffffff));
-    border: 1px solid color-mix(in srgb, var(--sn-color-accent, #2f6f4e) 35%, var(--sn-color-border, #d9e2ec));
-    border-radius: var(--sn-radius-lg, 1rem);
-    padding: var(--sn-space-xl, 2.5rem);
+    padding: clamp(2rem, 5vw, 3.5rem);
+    border-radius: var(--sn-radius-xl, 1.75rem);
     text-align: center;
   }
 
+  .sn-sec-cta--warm .sn-sec-cta__panel {
+    background: color-mix(in srgb, var(--sn-color-accent, #c46b4a) 10%, var(--sn-color-surface, #fff));
+    border: 1px solid color-mix(in srgb, var(--sn-color-accent, #c46b4a) 28%, var(--sn-color-border, #d9e2ec));
+    box-shadow: var(--sn-shadow-md, none);
+  }
+
+  .sn-sec-cta--bold .sn-sec-cta__panel {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--sn-color-primary, #3d6b8a) 88%, #000),
+      var(--sn-color-surface-elevated, #242d36)
+    );
+    color: #fff;
+    border: 1px solid var(--sn-color-border, #2e3a45);
+    box-shadow: var(--sn-shadow-lg, none);
+  }
+
   .sn-sec-cta__body {
-    margin: 0 auto var(--sn-space-lg, 1.5rem);
-    max-width: 55ch;
+    margin: 0.75rem auto 1.5rem;
+    max-width: 50ch;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: inherit;
+    opacity: 0.92;
+  }
+
+  .sn-sec-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .sn-sec-cta--bold .sn-btn--secondary {
+    color: #fff;
+    border-color: rgb(255 255 255 / 35%);
   }
 </style>

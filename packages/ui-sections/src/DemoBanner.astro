@@ -8,16 +8,36 @@ const { message = DEFAULT_DEMO_BANNER_MESSAGE, class: className = '' } = Astro.p
 ---
 
 <div class={`sn-sec-demo-banner ${className}`.trim()} role="note">
-  {message}
+  <span class="sn-sec-demo-banner__label">Demo</span>
+  <span>{message}</span>
 </div>
 
 <style>
   .sn-sec-demo-banner {
-    background: #fff7ed;
-    border-bottom: 1px solid #fed7aa;
-    color: #9a3412;
-    font-weight: 600;
-    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    background: color-mix(in srgb, var(--sn-color-accent, #c46b4a) 8%, var(--sn-color-surface-elevated, #f3efe8));
+    border-bottom: 1px solid var(--sn-color-border, #d9e2ec);
+    color: var(--sn-color-text-muted, #4a5f54);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
     text-align: center;
+  }
+
+  .sn-sec-demo-banner__label {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--sn-radius-pill, 999px);
+    background: var(--sn-color-accent, #c46b4a);
+    color: var(--sn-color-accent-contrast, #fff);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
 </style>

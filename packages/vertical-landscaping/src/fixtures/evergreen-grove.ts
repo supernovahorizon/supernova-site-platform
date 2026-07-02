@@ -1,4 +1,5 @@
 import type { LandscapingSiteContent } from '../landscaping-site.js';
+import { evergreenGroveTheme } from '../theme.js';
 
 export const evergreenGroveFixture = {
   siteUrl: 'https://landscaping.sites.supernovahorizon.com',
@@ -6,9 +7,9 @@ export const evergreenGroveFixture = {
   business: {
     legalName: 'Evergreen Grove Landscaping LLC',
     displayName: 'Evergreen Grove Landscaping',
-    tagline: 'Thoughtful outdoor spaces for demonstration neighborhoods',
+    tagline: 'Thoughtful landscapes. Naturally cared for.',
     description:
-      'Fictional demonstration landscaping business showcasing lawn care, planting design, and hardscaping workflows for the Supernova Site Platform.',
+      'Sample residential landscaping business focused on garden design, lawn care, and seasonal outdoor maintenance for neighborhood homes.',
     vertical: 'landscaping',
     isDemonstration: true,
   },
@@ -33,11 +34,11 @@ export const evergreenGroveFixture = {
     notes: 'Demonstration hours only — not a live booking calendar.',
   },
   branding: {
-    logoSrc: '/images/logo.svg',
-    logoAlt: 'Evergreen Grove Landscaping demonstration logo',
-    faviconSrc: '/images/logo.svg',
-    primaryColor: '#2f6f4e',
-    accentColor: '#3d8b5f',
+    logoSrc: '/images/logo.jpg',
+    logoAlt: 'Evergreen Grove Landscaping wordmark',
+    faviconSrc: '/images/logo.jpg',
+    primaryColor: '#2f5d44',
+    accentColor: '#c46b4a',
     fontFamily: 'system',
   },
   navigation: [
@@ -53,10 +54,10 @@ export const evergreenGroveFixture = {
   seo: {
     titleSuffix: 'Evergreen Grove Landscaping',
     defaultDescription:
-      'Fictional Portland-area landscaping demonstration with services, projects, and quote workflows for platform evaluation.',
+      'Evergreen Grove Landscaping designs and maintains residential outdoor spaces across Portland-area neighborhoods with garden design, lawn care, and hardscaping.',
     socialImage: {
-      src: '/images/hero.svg',
-      alt: 'Illustrated evergreen garden hero placeholder for the demonstration site',
+      src: '/images/hero.jpg',
+      alt: 'Lush residential garden with layered planting beds and trimmed lawn',
     },
     robots: 'index,follow',
   },
@@ -83,8 +84,8 @@ export const evergreenGroveFixture = {
       description:
         'This demonstration service models recurring lawn maintenance for residential properties. Content covers mowing cadence, edging, seasonal fertilization, and aeration notes without implying real availability or pricing.',
       heroImage: {
-        src: '/images/service-lawn.svg',
-        alt: 'Illustrated lawn care service placeholder with trimmed grass rows',
+        src: '/images/service-lawn.jpg',
+        alt: 'Freshly mowed residential lawn with clean edging',
       },
       benefits: [
         'Consistent mowing and edging cadence',
@@ -101,8 +102,8 @@ export const evergreenGroveFixture = {
       description:
         'Garden design pages show how planting concepts, bed shapes, and maintenance notes can be authored once and rendered across service and project templates. All plant lists and layouts are fictional.',
       heroImage: {
-        src: '/images/service-garden.svg',
-        alt: 'Illustrated garden design service placeholder with layered planting beds',
+        src: '/images/service-garden.jpg',
+        alt: 'Colorful garden beds with native shrubs and perennials',
       },
       benefits: [
         'Pollinator-friendly planting palettes',
@@ -119,8 +120,8 @@ export const evergreenGroveFixture = {
       description:
         'Hardscaping content demonstrates how material choices, drainage notes, and construction phases can be presented without real project photos. Images are neutral SVG placeholders only.',
       heroImage: {
-        src: '/images/service-hardscape.svg',
-        alt: 'Illustrated hardscaping service placeholder with patio pavers',
+        src: '/images/service-hardscape.jpg',
+        alt: 'Stone patio with outdoor seating overlooking a landscaped yard',
       },
       benefits: [
         'Paver patio layout examples',
@@ -137,8 +138,8 @@ export const evergreenGroveFixture = {
       description:
         'Seasonal cleanup illustrates one-off maintenance visits with scope lists, disposal notes, and scheduling copy. It helps validate quote forms that reference multiple service types.',
       heroImage: {
-        src: '/images/service-cleanup.svg',
-        alt: 'Illustrated seasonal cleanup service placeholder with rake and leaf piles',
+        src: '/images/service-cleanup.jpg',
+        alt: 'Garden bed refresh with mulch and seasonal plant care',
       },
       benefits: [
         'Leaf and needle removal scopes',
@@ -159,8 +160,8 @@ export const evergreenGroveFixture = {
       neighborhoods: ['Cedar Knoll', 'Maple Terrace', 'Fern Crossing'],
       featuredServices: ['lawn-care', 'garden-design', 'seasonal-cleanup'],
       heroImage: {
-        src: '/images/area-north-hill.svg',
-        alt: 'Illustrated North Hill District placeholder with terraced yards',
+        src: '/images/area-north-hill.jpg',
+        alt: 'Terraced residential yards on a tree-lined Portland hillside',
       },
     },
     {
@@ -174,8 +175,8 @@ export const evergreenGroveFixture = {
       neighborhoods: ['Riverbend Commons', 'Willow Flats', 'Birch Landing'],
       featuredServices: ['garden-design', 'hardscaping', 'seasonal-cleanup'],
       heroImage: {
-        src: '/images/area-willow-river.svg',
-        alt: 'Illustrated Willow River Corridor placeholder with pathway and native plants',
+        src: '/images/area-willow-river.jpg',
+        alt: 'River-adjacent pathway with native plantings and shared greenway',
       },
     },
   ],
@@ -186,8 +187,8 @@ export const evergreenGroveFixture = {
       summary: 'Demonstration hardscaping layout with seating nook and permeable border details.',
       serviceSlug: 'hardscaping',
       image: {
-        src: '/images/project-patio.svg',
-        alt: 'Illustrated courtyard paver patio demonstration project',
+        src: '/images/project-patio.jpg',
+        alt: 'Courtyard paver patio with built-in seating nook',
       },
       completedLabel: 'Demo portfolio — 2025',
     },
@@ -197,8 +198,8 @@ export const evergreenGroveFixture = {
       summary: 'Fictional planting bed with layered heights, bloom sequencing, and mulch edging.',
       serviceSlug: 'garden-design',
       image: {
-        src: '/images/project-border.svg',
-        alt: 'Illustrated native pollinator border demonstration project',
+        src: '/images/project-border.jpg',
+        alt: 'Native pollinator border with layered bloom heights',
       },
       completedLabel: 'Demo portfolio — 2024',
     },
@@ -208,8 +209,8 @@ export const evergreenGroveFixture = {
       summary: 'Sample overseeding and aeration plan for a compact front yard with tree cover.',
       serviceSlug: 'lawn-care',
       image: {
-        src: '/images/project-lawn.svg',
-        alt: 'Illustrated shade-tolerant lawn refresh demonstration project',
+        src: '/images/project-lawn.jpg',
+        alt: 'Shade-tolerant front lawn after overseeding and edging',
       },
       completedLabel: 'Demo portfolio — 2025',
     },
@@ -220,12 +221,12 @@ export const evergreenGroveFixture = {
       title: 'Backyard Refresh',
       summary: 'Fictional before-and-after story showing bed expansion and pathway realignment.',
       beforeImage: {
-        src: '/images/before-backyard.svg',
-        alt: 'Illustrated before state of a backyard with sparse planting beds',
+        src: '/images/before-backyard.jpg',
+        alt: 'Backyard before refresh with sparse beds and worn edges',
       },
       afterImage: {
-        src: '/images/after-backyard.svg',
-        alt: 'Illustrated after state of a backyard with refreshed planting beds',
+        src: '/images/after-backyard.jpg',
+        alt: 'Backyard after refresh with expanded planting beds and aligned pathway',
       },
     },
     {
@@ -233,12 +234,12 @@ export const evergreenGroveFixture = {
       title: 'Front Entry Update',
       summary: 'Demonstration entry refresh with new walkway edging and container plantings.',
       beforeImage: {
-        src: '/images/before-entry.svg',
-        alt: 'Illustrated before state of a front entry with worn walkway edges',
+        src: '/images/before-entry.jpg',
+        alt: 'Front entry before update with worn walkway edging',
       },
       afterImage: {
-        src: '/images/after-entry.svg',
-        alt: 'Illustrated after state of a front entry with refreshed walkway edging',
+        src: '/images/after-entry.jpg',
+        alt: 'Front entry after update with refreshed walkway and container plantings',
       },
     },
   ],
@@ -246,7 +247,7 @@ export const evergreenGroveFixture = {
     {
       id: 't-01',
       quote:
-        'The demonstration crew explained each maintenance visit clearly. This testimonial is fictional and included only to preview layout patterns.',
+        'The crew explained each visit clearly and left the beds looking balanced without feeling over-designed.',
       authorName: 'Alex M.',
       authorContext: 'Fictional North Hill homeowner',
       isFictionalDemonstration: true,
@@ -254,7 +255,7 @@ export const evergreenGroveFixture = {
     {
       id: 't-02',
       quote:
-        'We appreciated the sample planting plan and phased hardscape notes. No real customer relationship is implied.',
+        'We appreciated the planting plan and phased hardscape notes — it made decisions feel manageable.',
       authorName: 'Jordan P.',
       authorContext: 'Fictional Willow River neighbor',
       isFictionalDemonstration: true,
@@ -285,17 +286,17 @@ export const evergreenGroveFixture = {
   ctas: [
     {
       id: 'quote-primary',
-      headline: 'Ready to explore a demonstration quote?',
-      body: 'Use the quote form to see validation, consent copy, and service picklists wired to fictional content.',
-      buttonLabel: 'Request a quote',
+      headline: 'Ready for outdoor spaces that feel intentional?',
+      body: 'Tell us about your yard and goals. We will follow up with a clear estimate and next steps.',
+      buttonLabel: 'Request a free estimate',
       buttonHref: '/quote',
     },
     {
       id: 'contact-secondary',
-      headline: 'Prefer to review contact details first?',
-      body: 'Visit the contact page for phone, email, hours, and address placeholders.',
-      buttonLabel: 'Contact us',
-      buttonHref: '/contact',
+      headline: 'Want to talk through ideas first?',
+      body: 'Reach out by phone or email to discuss scope, timing, and what matters most for your property.',
+      buttonLabel: 'Explore our work',
+      buttonHref: '/projects',
     },
   ],
   about: {
@@ -331,10 +332,58 @@ export const evergreenGroveFixture = {
       'The page you requested is not part of this demonstration site. Use the navigation menu to explore fictional services and projects.',
     homeHref: '/',
   },
+  theme: evergreenGroveTheme,
   home: {
-    heroHeadline: 'Evergreen Grove Landscaping',
-    heroSubheadline: 'Demonstration business — fictional local landscaping services',
+    heroEyebrow: 'Thoughtful landscapes. Naturally cared for.',
+    heroHeadline: 'Outdoor spaces designed to grow beautifully.',
+    heroSubheadline:
+      'Residential garden design, lawn care, and hardscaping for Portland-area neighborhoods.',
     intro:
-      'Explore a full multi-page landscaping demo with services, service areas, projects, FAQ, and quote flows. All businesses, testimonials, and imagery are fictional.',
+      'We help homeowners shape yards that feel welcoming year-round — with clear plans, careful installation, and maintenance that respects your time.',
+    trustItems: [
+      'Free estimates',
+      'Locally focused',
+      'Clear project planning',
+      'Mobile-friendly requests',
+    ],
+    processSteps: [
+      {
+        title: 'Tell us about the space',
+        description: 'Share photos, goals, and how you use your yard so we understand priorities.',
+      },
+      {
+        title: 'Review the plan and estimate',
+        description:
+          'Receive a scoped proposal with materials, timing, and options that fit your budget.',
+      },
+      {
+        title: 'Schedule the work',
+        description:
+          'Coordinate access, prep, and installation with responsive updates along the way.',
+      },
+      {
+        title: 'Enjoy the transformation',
+        description:
+          'Walk through the finished space together and discuss seasonal care recommendations.',
+      },
+    ],
+    whyChooseItems: [
+      {
+        title: 'Design-conscious planting',
+        description:
+          'Beds and borders are planned for structure, seasonal color, and manageable upkeep — not one-size-fits-all templates.',
+      },
+      {
+        title: 'Neighborhood-aware routing',
+        description:
+          'Service areas help us plan efficient visits and recommend plants suited to local sun, soil, and slope.',
+      },
+      {
+        title: 'Straightforward communication',
+        description:
+          'You get clear scope notes, realistic timelines, and one primary point of contact from estimate to completion.',
+      },
+    ],
+    featuredComparisonSlug: 'backyard-refresh',
   },
 } satisfies LandscapingSiteContent;

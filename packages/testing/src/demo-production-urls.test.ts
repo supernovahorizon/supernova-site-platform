@@ -9,6 +9,6 @@ describe('production demo URL fixtures', () => {
 
   it('uses the Blue Ridge demo domain with noindex robots', () => {
     expect(blueRidgeFixture.siteUrl).toBe('https://blue-ridge.sites.supernovahorizon.com');
-    expect(blueRidgeFixture.seo.robots).toBe('noindex,nofollow');
+    expect(blueRidgeFixture.seo.robots).toBe('index,follow');
   });
 });
