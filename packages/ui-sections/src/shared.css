@@ -7,6 +7,8 @@
 html {
   scroll-behavior: smooth;
   overflow-x: clip;
+  scrollbar-color: var(--sn-color-primary, #2f6f4e) var(--sn-color-background, #faf7f2);
+  scrollbar-width: thin;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -23,6 +25,8 @@ body {
   color: var(--sn-color-text, #1f2933);
   background: var(--sn-color-background, #f8faf8);
   overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 h1,
@@ -31,6 +35,9 @@ h3,
 h4 {
   font-family: var(--sn-font-heading, inherit);
   line-height: 1.2;
+  text-wrap: balance;
+  margin-top: 0;
+  font-weight: 700;
 }
 
 img,
@@ -45,7 +52,7 @@ a {
 }
 
 .sn-sec {
-  padding-block: clamp(2.5rem, 5vw, 4rem);
+  padding-block: clamp(3rem, 8vw, 6rem);
 }
 
 .sn-sec--compact {
@@ -56,7 +63,8 @@ a {
   margin: 0 0 var(--sn-space-lg, 1.5rem);
   max-width: 65ch;
   color: var(--sn-color-text-muted, var(--sn-color-text, #1f2933));
-  font-size: 1.0625rem;
+  font-size: 1.125rem;
+  text-wrap: pretty;
 }
 
 .sn-sec__grid {
@@ -146,10 +154,18 @@ a {
 .sn-btn--primary {
   background: var(--sn-color-accent, #2f6f4e);
   color: var(--sn-color-accent-contrast, #fff);
+  box-shadow: var(--sn-shadow-sm);
 }
 
-.sn-btn--primary:hover {
+.sn-btn--primary:hover:not(:disabled) {
   filter: brightness(1.05);
+  transform: translateY(-2px);
+  box-shadow: var(--sn-shadow-md);
+}
+
+.sn-btn--primary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--sn-shadow-sm);
 }
 
 .sn-btn--secondary {
@@ -158,10 +174,30 @@ a {
   border-color: color-mix(in srgb, currentColor 35%, transparent);
 }
 
+.sn-btn--secondary:hover:not(:disabled) {
+  background: color-mix(in srgb, currentColor 5%, transparent);
+  border-color: currentColor;
+  transform: translateY(-2px);
+}
+
+.sn-btn--secondary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
 .sn-btn--ghost {
   background: transparent;
   color: var(--sn-color-accent, #2f6f4e);
   border-color: var(--sn-color-border, #d9e2ec);
+}
+
+.sn-btn--ghost:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--sn-color-accent) 8%, transparent);
+  border-color: var(--sn-color-accent);
+  transform: translateY(-2px);
+}
+
+.sn-btn--ghost:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .sn-sec__button {

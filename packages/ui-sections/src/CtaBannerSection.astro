@@ -39,46 +39,73 @@ const {
 
 <style>
   .sn-sec-cta__panel {
-    padding: clamp(2rem, 5vw, 3.5rem);
+    padding: clamp(2.5rem, 6vw, 4.5rem);
     border-radius: var(--sn-radius-xl, 1.75rem);
     text-align: center;
+    position: relative;
+    overflow: hidden;
   }
 
   .sn-sec-cta--warm .sn-sec-cta__panel {
-    background: color-mix(in srgb, var(--sn-color-accent, #c46b4a) 10%, var(--sn-color-surface, #fff));
-    border: 1px solid color-mix(in srgb, var(--sn-color-accent, #c46b4a) 28%, var(--sn-color-border, #d9e2ec));
-    box-shadow: var(--sn-shadow-md, none);
+    background: radial-gradient(circle at 10% 20%, rgba(212, 106, 67, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(36, 76, 53, 0.06) 0%, transparent 50%),
+                var(--sn-color-surface, #fff);
+    border: 1px solid var(--sn-color-border, #e3dacd);
+    box-shadow: var(--sn-shadow-md);
   }
 
   .sn-sec-cta--bold .sn-sec-cta__panel {
     background: linear-gradient(
       135deg,
-      color-mix(in srgb, var(--sn-color-primary, #3d6b8a) 88%, #000),
-      var(--sn-color-surface-elevated, #242d36)
+      color-mix(in srgb, var(--sn-color-primary, #2e5775) 80%, #000),
+      var(--sn-color-surface, #131a22)
     );
     color: #fff;
-    border: 1px solid var(--sn-color-border, #2e3a45);
-    box-shadow: var(--sn-shadow-lg, none);
+    border: 1px solid var(--sn-color-border, #202c3a);
+    box-shadow: var(--sn-shadow-lg);
+  }
+
+  .sn-sec-cta--bold .sn-sec-cta__panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 80% 20%, rgba(58, 142, 207, 0.15) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .sn-sec-cta__panel > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .sn-sec-cta__panel :global(h2) {
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    margin-bottom: 1rem;
   }
 
   .sn-sec-cta__body {
-    margin: 0.75rem auto 1.5rem;
-    max-width: 50ch;
-    font-size: 1.0625rem;
-    line-height: 1.6;
+    margin: 0.75rem auto 1.75rem;
+    max-width: 54ch;
+    font-size: 1.125rem;
+    line-height: 1.65;
     color: inherit;
-    opacity: 0.92;
+    opacity: 0.9;
   }
 
   .sn-sec-cta__actions {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 0.75rem;
+    gap: 1rem;
   }
 
   .sn-sec-cta--bold .sn-btn--secondary {
     color: #fff;
-    border-color: rgb(255 255 255 / 35%);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+  .sn-sec-cta--bold .sn-btn--secondary:hover {
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.08);
   }
 </style>

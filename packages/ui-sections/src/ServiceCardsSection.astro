@@ -66,21 +66,23 @@ const {
 
 <style>
   .sn-sec-services__header {
-    margin-bottom: var(--sn-space-lg, 1.5rem);
+    margin-bottom: var(--sn-space-xl, 2.5rem);
   }
 
   .sn-sec-services__grid {
     display: grid;
-    gap: var(--sn-space-md, 1rem);
+    gap: var(--sn-space-lg, 1.5rem);
   }
 
   @media (min-width: 40rem) {
     .sn-sec-services--organic .sn-sec-services__grid {
-      grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+      gap: 2rem;
     }
 
     .sn-sec-services--geometric .sn-sec-services__grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
     }
   }
 
@@ -90,61 +92,106 @@ const {
     border: 1px solid var(--sn-color-border, #d9e2ec);
     overflow: hidden;
     box-shadow: var(--sn-shadow-sm, none);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
   }
 
+  /* Organic Card Styles */
   .sn-sec-services--organic .sn-sec-services__card {
-    border-radius: var(--sn-radius-xl, 1.75rem);
+    border-radius: var(--sn-radius-xl, 2.25rem);
+    background: var(--sn-color-surface, #fff);
+    border: 1px solid var(--sn-color-border);
   }
 
+  .sn-sec-services--organic .sn-sec-services__card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--sn-shadow-lg);
+    border-color: color-mix(in srgb, var(--sn-color-accent) 40%, var(--sn-color-border));
+  }
+
+  /* Geometric Card Styles */
   .sn-sec-services--geometric .sn-sec-services__card {
-    border-radius: var(--sn-radius-md, 0.5rem);
+    border-radius: var(--sn-radius-md, 0.25rem);
+    background: var(--sn-color-surface, #131a22);
+    border: 1px solid var(--sn-color-border, #202c3a);
     grid-template-columns: 1fr;
+  }
+
+  .sn-sec-services--geometric .sn-sec-services__card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--sn-shadow-md);
+    border-color: var(--sn-color-accent, #3a8ecf);
   }
 
   @media (min-width: 48rem) {
     .sn-sec-services--geometric .sn-sec-services__card {
-      grid-template-columns: 0.9fr 1.1fr;
+      grid-template-columns: 0.95fr 1.05fr;
+    }
+
+    .sn-sec-services--geometric .sn-sec-services__card:nth-child(even) {
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+
+    .sn-sec-services--geometric .sn-sec-services__card:nth-child(even) .sn-sec-services__media {
+      order: 2;
     }
   }
 
   .sn-sec-services__media {
     display: block;
     overflow: hidden;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 11;
   }
 
   .sn-sec-services__media :global(img) {
     height: 100%;
     object-fit: cover;
-    transition: transform 0.35s ease;
+    transition: transform 0.5s ease;
   }
 
   @media (prefers-reduced-motion: no-preference) {
     .sn-sec-services__card:hover .sn-sec-services__media :global(img) {
-      transform: scale(1.03);
+      transform: scale(1.04);
     }
   }
 
   .sn-sec-services__body {
-    padding: var(--sn-space-md, 1rem) var(--sn-space-lg, 1.5rem) var(--sn-space-lg, 1.5rem);
+    padding: var(--sn-space-lg, 1.5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .sn-sec-services__body p {
-    margin: 0.5rem 0 0;
+    margin: 0.75rem 0 0;
     color: var(--sn-color-text-muted, inherit);
-    font-size: 0.9375rem;
-    line-height: 1.55;
+    font-size: 0.95rem;
+    line-height: 1.6;
   }
 
   .sn-sec-services__more {
     display: inline-flex;
-    margin-top: 0.85rem;
-    font-weight: 600;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 1.25rem;
+    font-weight: 700;
     color: var(--sn-color-accent, #2f6f4e);
     text-decoration: none;
+    transition: gap 0.2s ease, text-decoration 0.2s ease;
+    width: fit-content;
+  }
+
+  .sn-sec-services__more::after {
+    content: '→';
+    font-family: system-ui, sans-serif;
+    transition: transform 0.2s ease;
   }
 
   .sn-sec-services__more:hover {
+    gap: 0.5rem;
     text-decoration: underline;
+  }
+
+  .sn-sec-services__more:hover::after {
+    transform: translateX(2px);
   }
 </style>
