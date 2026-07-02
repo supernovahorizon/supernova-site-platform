@@ -4,7 +4,7 @@ Open-source, schema-driven website platform and demonstration sites for small bu
 
 ## Status
 
-Landscaping golden path milestone. The platform can generate multi-page fictional landscaping demonstration sites from validated structured content, shared sections, and a minimal `create-site` CLI. Landscaping demos are configured for Cloudflare Pages deployment on dedicated subdomains once Pages projects are provisioned.
+Landscaping golden path milestone with AWS CDK demo deployment. The platform generates multi-page fictional landscaping demonstration sites from validated structured content, shared sections, and a minimal `create-site` CLI. Production demo hosting uses GitHub Actions → OIDC → AWS CDK → private S3 → CloudFront under `sites.supernovahorizon.com`.
 
 ## Repositories
 
@@ -30,10 +30,12 @@ pnpm dev
 
 Landscaping demos are clearly marked as demonstrations and must not present fake testimonials, ratings, or revenue claims.
 
-Public demo URLs (after Cloudflare Pages provisioning):
+Production demo URLs (after AWS deployment):
 
-- https://landscaping.supernovahorizon.com
-- https://blue-ridge-demo.supernovahorizon.com (noindex reuse-validation demo)
+- https://landscaping.sites.supernovahorizon.com
+- https://blue-ridge.sites.supernovahorizon.com (noindex reuse-validation demo)
+
+See `docs/runbooks/aws-demo-deployment.md` for bootstrap and deploy steps.
 
 ## Landscaping quick start
 
