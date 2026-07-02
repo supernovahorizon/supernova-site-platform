@@ -168,7 +168,6 @@ export const blueRidgeTokens: ThemeTokens = {
   },
 };
 
-
 export function getThemeTokens(themeId: ThemeConfig['id']): ThemeTokens {
   return themeId === 'blue-ridge' ? blueRidgeTokens : evergreenGroveTokens;
 }
