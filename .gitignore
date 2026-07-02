@@ -1,5 +1,7 @@
 node_modules/
 dist/
+cdk.out/
+infrastructure/cdk-outputs*.json
 .turbo/
 .astro/
 coverage/

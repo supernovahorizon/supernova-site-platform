@@ -1,7 +1,7 @@
 import type { LandscapingSiteContent } from '../landscaping-site.js';
 
 export const evergreenGroveFixture = {
-  siteUrl: 'https://landscaping.supernovahorizon.com',
+  siteUrl: 'https://landscaping.sites.supernovahorizon.com',
   locale: 'en-US',
   business: {
     legalName: 'Evergreen Grove Landscaping LLC',
